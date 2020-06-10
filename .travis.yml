@@ -1,0 +1,29 @@
+sudo: true
+dist: xenial
+jobs:
+  include:
+    - language: ruby
+      services:
+        - postgresql
+        - redis-server
+      addons:
+        postgresql: "10"
+      rvm:
+        - 2.6.4
+      env:
+        global:
+          - RAILS_ENV=test
+      cache:
+        bundler: true
+      before_install:
+        - gem install bundler -v 2.0.1
+        - sudo apt-get update
+        - sudo apt-get install -y libsodium-dev
+      install:
+        - git clone https://github.com/bitcoin-core/secp256k1.git && cd secp256k1 && ./autogen.sh && ./configure && make && ./tests && sudo make install && cd ..
+        - bundle install
+      before_script:
+        - psql -c 'create database "ckb_faucet_test";' -U postgres
+      script:
+        - bundle exec rails db:migrate
+        - CI=true bundle exec rails test
