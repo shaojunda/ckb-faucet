@@ -53,4 +53,3 @@ module CoreExtensions
 end
 
 ActiveRecord::Base.send :include, CoreExtensions::SecureTokenWithLength
-
