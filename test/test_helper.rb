@@ -13,7 +13,6 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
-DatabaseCleaner.strategy = :transaction
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     # Choose a test framework:
@@ -34,14 +33,4 @@ class ActiveSupport::TestCase
   parallelize(workers: :number_of_processors)
 
   # Add more helper methods to be used by all tests here...
-  def before_setup
-    super
-    DatabaseCleaner.start
-  end
-
-  def after_teardown
-    super
-    DatabaseCleaner.clean
-    Rails.cache.clear
-  end
 end

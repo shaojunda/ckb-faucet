@@ -1,19 +1,9 @@
 # frozen_string_literal: true
 
-require "test_helper"
-
-class AccessKeyTest < ActiveSupport::TestCase
-  test "should automatically generate secret_access_key when create access key" do
-    access_key = create(:access_key)
-
-    assert_not_nil access_key.secret_access_key
-    assert_equal 40, access_key.secret_access_key.size
-  end
-
-  test "should automatically generate access_key_id when create access key" do
-    access_key = create(:access_key)
-    assert_not_nil access_key.access_key_id
-    assert_equal 24, access_key.access_key_id.size
+FactoryBot.define do
+  factory :access_key do
+    secret_access_key { }
+    status { "active" }
   end
 end
 
