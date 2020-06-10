@@ -22,6 +22,13 @@ class ProductTest < ActiveSupport::TestCase
     assert_equal access_key.secret_access_key, product.secret_access_key
     assert_equal access_key.access_key_id, product.access_key_id
   end
+
+  test "should not creat product if quota config keys is invalid" do
+    quota_config = { "x": 100, "y": 50 }
+    assert_difference -> { Product.count }, 0 do
+      Product.generate(name: "KFC", quota_config: quota_config)
+    end
+  end
 end
 
 # == Schema Information
