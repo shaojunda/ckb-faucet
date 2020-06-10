@@ -40,6 +40,7 @@ gem "mina-multistage", require: false
 group :development, :test do
   gem "pry"
   gem "pry-nav"
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -61,7 +62,6 @@ group :test do
   gem "shoulda-matchers"
   gem "database_cleaner"
   gem "mocha"
-  gem "factory_bot_rails"
   gem "faker", git: "https://github.com/stympy/faker.git", branch: "master"
   gem "codecov", require: false
 end
