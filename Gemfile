@@ -47,6 +47,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "annotate"
   gem "awesome_print"
+  gem "annotate"
   gem "rubocop", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
@@ -64,6 +65,7 @@ group :test do
   gem "factory_bot_rails"
   gem "faker", git: "https://github.com/stympy/faker.git", branch: "master"
   gem "codecov", require: false
+  gem "factory_bot_rails"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

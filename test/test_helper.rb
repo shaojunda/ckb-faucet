@@ -29,11 +29,19 @@ if ENV["CI"] == "true"
 end
 
 class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)
 
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  fixtures :all
-
   # Add more helper methods to be used by all tests here...
+  def before_setup
+    super
+    DatabaseCleaner.start
+  end
+
+  def after_teardown
+    super
+    DatabaseCleaner.clean
+    Rails.cache.clear
+  end
 end
