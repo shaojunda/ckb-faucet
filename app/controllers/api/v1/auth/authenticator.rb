@@ -17,7 +17,11 @@ module Api
           attr_reader :request, :claim_event_params
 
           def check_authorization_header!
-            raise Api::V1::ApiError::MissingAuthorizationHeaderError if request.headers["authorization"].blank?
+            authorization = request.headers["authorization"]
+            raise Api::V1::ApiError::MissingAuthorizationHeaderError if authorization.blank?
+
+            algorithm = authorization.split(" ")[0]
+            raise Api::V1::ApiError::AlgorithmFieldInvalidError if algorithm != "CKBFS1-HMAC-SHA256"
           end
       end
     end
