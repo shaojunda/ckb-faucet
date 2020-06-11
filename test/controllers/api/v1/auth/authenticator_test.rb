@@ -24,4 +24,15 @@ class AuthenticatorTest < ActiveSupport::TestCase
       authenticator.authenticate!
     end
   end
+
+  test "should raise error if authorization header's credential is missing" do
+    request = mock
+    headers = { host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date" }.stringify_keys
+    request.expects(:headers).returns(headers)
+    authenticator = Api::V1::Auth::Authenticator.new(request, {})
+
+    assert_raises Api::V1::ApiError::CredentialFieldInvalidError do
+      authenticator.authenticate!
+    end
+  end
 end
