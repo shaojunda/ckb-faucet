@@ -24,6 +24,12 @@ module Api
           super(code: 1002, status: 401, title: "Algorithm field is invalid", detail: "Algorithm field must be CKBFS1-HMAC-SHA256", href: "")
         end
       end
+
+      class CredentialFieldInvalidError < ApiError
+        def initialize
+          super(code: 1002, status: 401, title: "Credential field is invalid", detail: "Credential field format is Credential=<Access Key ID/Scope>", href: "")
+        end
+      end
     end
   end
 end

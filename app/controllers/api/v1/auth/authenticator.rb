@@ -20,8 +20,12 @@ module Api
             authorization = request.headers["authorization"]
             raise Api::V1::ApiError::MissingAuthorizationHeaderError if authorization.blank?
 
-            algorithm = authorization.split(" ")[0]
+            authorization_fields = authorization.split(" ")
+            algorithm = authorization_fields[0]
             raise Api::V1::ApiError::AlgorithmFieldInvalidError if algorithm != "CKBFS1-HMAC-SHA256"
+
+            credential = authorization_fields[1]
+            raise Api::V1::ApiError::CredentialFieldInvalidError if credential.split("=")[0] != "Credential"
           end
       end
     end
