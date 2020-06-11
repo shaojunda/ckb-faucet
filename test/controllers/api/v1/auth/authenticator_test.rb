@@ -35,4 +35,15 @@ class AuthenticatorTest < ActiveSupport::TestCase
       authenticator.authenticate!
     end
   end
+
+  test "should raise error if authorization header credential filed's access key id is invalid" do
+    request = mock
+    headers = { host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=2/20200611/faucet/ckbfs1_request" }.stringify_keys
+    request.expects(:headers).returns(headers)
+    authenticator = Api::V1::Auth::Authenticator.new(request, {})
+
+    assert_raises Api::V1::ApiError::AccessKeyIdInvalidError do
+      authenticator.authenticate!
+    end
+  end
 end
