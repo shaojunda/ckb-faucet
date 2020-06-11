@@ -36,6 +36,12 @@ module Api
           super(code: 1002, status: 401, title: "Access Key Id is invalid", detail: "Access Key Id must be 24 characters long", href: "")
         end
       end
+
+      class ProductNotFoundError < ApiError
+        def initialize
+          super(code: 1002, status: 401, title: "Product not found", detail: "No product found by given access key id", href: "")
+        end
+      end
     end
   end
 end

@@ -14,7 +14,7 @@ module Api
         end
 
         private
-          attr_reader :request, :claim_event_params
+          attr_accessor :request, :claim_event_params, :access_key_id
 
           def check_authorization_header!
             authorization = request.headers["authorization"]
@@ -30,6 +30,9 @@ module Api
 
             access_key_id = credential_values.split("/")[0]
             raise Api::V1::ApiError::AccessKeyIdInvalidError if access_key_id.size != 24
+
+            product = Product.find_by(access_key_id: access_key_id)
+            raise Api::V1::ApiError::ProductNotFoundError if product.blank?
           end
       end
     end
