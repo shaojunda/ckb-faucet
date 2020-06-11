@@ -13,4 +13,15 @@ class AuthenticatorTest < ActiveSupport::TestCase
       authenticator.authenticate!
     end
   end
+
+  test "should raise error if authorization header's algorithm is invalid" do
+    request = mock
+    headers = { host: "domain.com", authorization: "abc" }.stringify_keys
+    request.expects(:headers).returns(headers)
+    authenticator = Api::V1::Auth::Authenticator.new(request, {})
+
+    assert_raises Api::V1::ApiError::AlgorithmFieldInvalidError do
+      authenticator.authenticate!
+    end
+  end
 end
