@@ -25,7 +25,11 @@ module Api
             raise Api::V1::ApiError::AlgorithmFieldInvalidError if algorithm != "CKBFS1-HMAC-SHA256"
 
             credential = authorization_fields[1]
-            raise Api::V1::ApiError::CredentialFieldInvalidError if credential.split("=")[0] != "Credential"
+            credential_values = credential.split("=")[1]
+            raise Api::V1::ApiError::CredentialFieldInvalidError if credential.split("=")[0] != "Credential" || credential_values.blank?
+
+            access_key_id = credential_values.split("/")[0]
+            raise Api::V1::ApiError::AccessKeyIdInvalidError if access_key_id.size != 24
           end
       end
     end

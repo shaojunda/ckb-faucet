@@ -30,6 +30,12 @@ module Api
           super(code: 1002, status: 401, title: "Credential field is invalid", detail: "Credential field format is Credential=<Access Key ID/Scope>", href: "")
         end
       end
+
+      class AccessKeyIdInvalidError < ApiError
+        def initialize
+          super(code: 1002, status: 401, title: "Access Key Id is invalid", detail: "Access Key Id must be 24 characters long", href: "")
+        end
+      end
     end
   end
 end
