@@ -69,7 +69,13 @@ module Api
 
       class TimestampInvalidError < ApiError
         def initialize
-          super(code: 1010, status: 401, title: "Timestamp is invalid", detail: "Your request must be performed within 5 minutes of the specified timestamp", href: "https://jsonapi.org/format/#crud")
+          super(code: 1010, status: 401, title: "Timestamp is invalid", detail: "Your request must be performed within 5 minutes of the specified timestamp", href: "")
+        end
+      end
+
+      class SignatureInvalidError < ApiError
+        def initialize
+          super(code: 1011, status: 401, title: "Signature is invalid", detail: "The request signature we calculated does not match the signature you provided. Check your Secret Access Key and signing method. Consult the service documentation for details.", href: "")
         end
       end
     end
