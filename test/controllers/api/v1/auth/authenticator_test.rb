@@ -117,4 +117,16 @@ class AuthenticatorTest < ActiveSupport::TestCase
       authenticator.authenticate!
     end
   end
+
+  test "should raise error if x-ckbfs-date header is not set" do
+    create(:product, access_key_id: "TYkNNrK4wjmche2i6WBAvajZ")
+    request = mock
+    headers = { host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date, Signature=ae0d663d2c9d437d35b753fe592947e21aefd1963d8b253776982438a9d46269" }.stringify_keys
+    request.expects(:headers).returns(headers).at_least_once
+    authenticator = Api::V1::Auth::Authenticator.new(request, {})
+
+    assert_raises Api::V1::ApiError::DateHeaderMissingError do
+      authenticator.authenticate!
+    end
+  end
 end
