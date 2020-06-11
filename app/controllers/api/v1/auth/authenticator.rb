@@ -12,10 +12,17 @@ module Api
           check_authorization_header!
           check_ckbfs_date!
           check_body!
+          check_timestamp!
         end
 
         private
           attr_accessor :request, :claim_event_params, :access_key_id
+
+          def check_timestamp!
+            tolerant_time = 5.minutes
+            timestamp = request.headers["x-ckbfs-date"].in_time_zone("UTC").to_i
+            raise Api::V1::ApiError::TimestampInvalidError if (Time.now.utc.to_i - timestamp).abs > tolerant_time
+          end
 
           def check_body!
             request_body = JSON.parse(request.body.read)

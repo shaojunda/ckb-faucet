@@ -66,6 +66,12 @@ module Api
           super(code: 1009, status: 401, title: "Request body is invalid", detail: "Request body type is Resource objects and it's attributes must contain (request_uuid, id, request_type, and pk160)", href: "https://jsonapi.org/format/#crud")
         end
       end
+
+      class TimestampInvalidError < ApiError
+        def initialize
+          super(code: 1010, status: 401, title: "Timestamp is invalid", detail: "Your request must be performed within 5 minutes of the specified timestamp", href: "https://jsonapi.org/format/#crud")
+        end
+      end
     end
   end
 end
