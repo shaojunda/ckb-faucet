@@ -36,7 +36,11 @@ module Api
 
             signed_headers = authorization_fields[2]
             signed_header_values = signed_headers.split("=")
-            raise Api::V1::ApiError::SignedHeadersInvalidError if signed_headers.blank? || signed_header_values[0] != "SignedHeaders" || signed_header_values[0] != "host;x-ckbfs-date;x-ckbfs-content-sha256".sort
+            raise Api::V1::ApiError::SignedHeadersInvalidError if signed_headers.blank? || signed_header_values[0] != "SignedHeaders" || signed_header_values[1] != %w(host x-ckbfs-date x-ckbfs-content-sha256).sort.join(";")
+
+            signature = authorization_fields[3]
+            signature_values = signature.split("=")
+            raise Api::V1::ApiError::SignatureMissingError if signature.blank? || signature_values[0] != "Signature" || signature_values[1].blank?
           end
       end
     end

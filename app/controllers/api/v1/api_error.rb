@@ -48,6 +48,12 @@ module Api
           super(code: 1006, status: 401, title: "SignedHeaders is invalid", detail: "SignedHeaders format is SignedHeaders=host;x-ckbfs-date;x-ckbfs-content-sha256", href: "")
         end
       end
+
+      class SignatureMissingError < ApiError
+        def initialize
+          super(code: 1007, status: 401, title: "Signature is invalid", detail: "Signature format is Signature=<Signature>", href: "")
+        end
+      end
     end
   end
 end
