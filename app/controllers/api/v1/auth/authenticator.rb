@@ -4,18 +4,28 @@ module Api
   module V1
     module Auth
       class Authenticator
-        def initialize(request, claim_event_params)
+        def initialize(request)
           @request = request
-          @claim_event_params = claim_event_params
         end
 
         def authenticate!
           check_authorization_header!
           check_ckbfs_date!
+          check_body!
         end
 
         private
           attr_accessor :request, :claim_event_params, :access_key_id
+
+          def check_body!
+            request_body = JSON.parse(request.body.read)
+            if request_body.keys.size != 1 || request_body.keys.first != "data" || request_body.dig("data").keys.sort != %w(attributes id type) ||
+                request_body.dig("data", "type") != "claim_event" ||  request_body.dig("data", "attributes").keys.sort != %w(request_uuid request_type pk160).sort
+              raise Api::V1::ApiError::RequestBodyInvalidError
+            end
+          rescue JSON::ParserError
+            raise Api::V1::ApiError::RequestBodyInvalidError
+          end
 
           def check_ckbfs_date!
             raise Api::V1::ApiError::DateHeaderMissingError if request.headers["x-ckbfs-date"].blank?

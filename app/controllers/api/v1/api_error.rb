@@ -60,6 +60,12 @@ module Api
           super(code: 1008, status: 401, title: "x-ckbfs-date header is required", detail: "x-ckbfs-date header format is UTC time in ISO 8601 basic format, eg: 20200611T130513Z", href: "")
         end
       end
+
+      class RequestBodyInvalidError < ApiError
+        def initialize
+          super(code: 1009, status: 401, title: "Request body is invalid", detail: "Request body type is Resource objects and it's attributes must contain (request_uuid, id, request_type, and pk160)", href: "https://jsonapi.org/format/#crud")
+        end
+      end
     end
   end
 end
