@@ -25,7 +25,7 @@ module Api
             raise Api::V1::ApiError::AlgorithmFieldInvalidError if algorithm != "CKBFS1-HMAC-SHA256"
 
             credential = authorization_fields[1]
-            credential_values = credential.split("=")
+            credential_values = credential&.split("=")
             raise Api::V1::ApiError::CredentialFieldInvalidError if credential.blank? || credential_values[0] != "Credential" || credential_values[1].blank?
 
             access_key_id = credential_values[1].split("/")[0]
@@ -35,11 +35,11 @@ module Api
             raise Api::V1::ApiError::ProductNotFoundError if product.blank?
 
             signed_headers = authorization_fields[2]
-            signed_header_values = signed_headers.split("=")
-            raise Api::V1::ApiError::SignedHeadersInvalidError if signed_headers.blank? || signed_header_values[0] != "SignedHeaders" || signed_header_values[1] != %w(host x-ckbfs-date x-ckbfs-content-sha256).sort.join(";")
+            signed_header_values = signed_headers&.split("=")
+            raise Api::V1::ApiError::SignedHeadersInvalidError if signed_headers.blank? || signed_header_values[0] != "SignedHeaders" || signed_header_values[1].gsub(",", "") != %w(host x-ckbfs-date x-ckbfs-content-sha256).sort.join(";")
 
             signature = authorization_fields[3]
-            signature_values = signature.split("=")
+            signature_values = signature&.split("=")
             raise Api::V1::ApiError::SignatureMissingError if signature.blank? || signature_values[0] != "Signature" || signature_values[1].blank?
           end
       end
