@@ -25,14 +25,18 @@ module Api
             raise Api::V1::ApiError::AlgorithmFieldInvalidError if algorithm != "CKBFS1-HMAC-SHA256"
 
             credential = authorization_fields[1]
-            credential_values = credential.split("=")[1]
-            raise Api::V1::ApiError::CredentialFieldInvalidError if credential.split("=")[0] != "Credential" || credential_values.blank?
+            credential_values = credential.split("=")
+            raise Api::V1::ApiError::CredentialFieldInvalidError if credential.blank? || credential_values[0] != "Credential" || credential_values[1].blank?
 
-            access_key_id = credential_values.split("/")[0]
+            access_key_id = credential_values[1].split("/")[0]
             raise Api::V1::ApiError::AccessKeyIdInvalidError if access_key_id.size != 24
 
             product = Product.find_by(access_key_id: access_key_id)
             raise Api::V1::ApiError::ProductNotFoundError if product.blank?
+
+            signed_headers = authorization_fields[2]
+            signed_header_values = signed_headers.split("=")
+            raise Api::V1::ApiError::SignedHeadersInvalidError if signed_headers.blank? || signed_header_values[0] != "SignedHeaders" || signed_header_values[0] != "host;x-ckbfs-date;x-ckbfs-content-sha256".sort
           end
       end
     end

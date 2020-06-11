@@ -27,19 +27,25 @@ module Api
 
       class CredentialFieldInvalidError < ApiError
         def initialize
-          super(code: 1002, status: 401, title: "Credential field is invalid", detail: "Credential field format is Credential=<Access Key ID/Scope>", href: "")
+          super(code: 1003, status: 401, title: "Credential field is invalid", detail: "Credential field format is Credential=<Access Key ID/Scope>", href: "")
         end
       end
 
       class AccessKeyIdInvalidError < ApiError
         def initialize
-          super(code: 1002, status: 401, title: "Access Key Id is invalid", detail: "Access Key Id must be 24 characters long", href: "")
+          super(code: 1004, status: 401, title: "Access Key Id is invalid", detail: "Access Key Id must be 24 characters long", href: "")
         end
       end
 
       class ProductNotFoundError < ApiError
         def initialize
-          super(code: 1002, status: 401, title: "Product not found", detail: "No product found by given access key id", href: "")
+          super(code: 1005, status: 401, title: "Product not found", detail: "No product found by given access key id", href: "")
+        end
+      end
+
+      class SignedHeadersInvalidError < ApiError
+        def initialize
+          super(code: 1006, status: 401, title: "SignedHeaders is invalid", detail: "SignedHeaders format is SignedHeaders=host;x-ckbfs-date;x-ckbfs-content-sha256", href: "")
         end
       end
     end
