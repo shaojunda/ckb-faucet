@@ -7,6 +7,7 @@ SimpleCov.start "rails" do
   add_filter "/app/mailers/"
   add_filter "/lib/api/"
 end
+require "mocha/minitest"
 Minitest::Reporters.use!
 
 ENV["RAILS_ENV"] ||= "test"
