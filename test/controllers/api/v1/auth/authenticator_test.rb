@@ -69,4 +69,28 @@ class AuthenticatorTest < ActiveSupport::TestCase
       authenticator.authenticate!
     end
   end
+
+  test "should raise error if signature is missing" do
+    create(:product, access_key_id: "TYkNNrK4wjmche2i6WBAvajZ")
+    request = mock
+    headers = { host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-date;x-ckbfs-content-sha256" }.stringify_keys
+    request.expects(:headers).returns(headers)
+    authenticator = Api::V1::Auth::Authenticator.new(request, {})
+
+    assert_raises Api::V1::ApiError::SignatureMissingError do
+      authenticator.authenticate!
+    end
+  end
+
+  test "should raise error if signature's value is missing" do
+    create(:product, access_key_id: "TYkNNrK4wjmche2i6WBAvajZ")
+    request = mock
+    headers = { host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-date;x-ckbfs-content-sha256, Signature=" }.stringify_keys
+    request.expects(:headers).returns(headers)
+    authenticator = Api::V1::Auth::Authenticator.new(request, {})
+
+    assert_raises Api::V1::ApiError::SignatureMissingError do
+      authenticator.authenticate!
+    end
+  end
 end
