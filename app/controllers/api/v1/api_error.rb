@@ -54,6 +54,12 @@ module Api
           super(code: 1007, status: 401, title: "Signature is invalid", detail: "Signature format is Signature=<Signature>", href: "")
         end
       end
+
+      class DateHeaderMissingError < ApiError
+        def initialize
+          super(code: 1008, status: 401, title: "x-ckbfs-date header is required", detail: "x-ckbfs-date header format is UTC time in ISO 8601 basic format, eg: 20200611T130513Z", href: "")
+        end
+      end
     end
   end
 end

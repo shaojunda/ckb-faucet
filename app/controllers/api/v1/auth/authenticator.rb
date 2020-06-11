@@ -11,10 +11,15 @@ module Api
 
         def authenticate!
           check_authorization_header!
+          check_ckbfs_date!
         end
 
         private
           attr_accessor :request, :claim_event_params, :access_key_id
+
+          def check_ckbfs_date!
+            raise Api::V1::ApiError::DateHeaderMissingError if request.headers["x-ckbfs-date"].blank?
+          end
 
           def check_authorization_header!
             authorization = request.headers["authorization"]
