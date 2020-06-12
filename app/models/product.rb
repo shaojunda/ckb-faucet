@@ -7,7 +7,7 @@ class Product < ApplicationRecord
   def self.generate(name:, quota_config:)
     ActiveRecord::Base.transaction do
       access_key = AccessKey.create!
-      self.create(name: name, quota_config: quota_config, access_key_id: access_key.access_key_id, secret_access_key: access_key.secret_access_key)
+      self.create!(name: name, quota_config: quota_config, access_key_id: access_key.access_key_id, secret_access_key: access_key.secret_access_key)
     end
   end
 
