@@ -49,7 +49,8 @@ class AuthenticatorTest < ActiveSupport::TestCase
 
   test "should raise error if can not found product by given access key id" do
     request = mock
-    headers = { host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request" }.stringify_keys
+    timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
+    headers = { "x-ckbfs-date": timestamp, host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date, Signature=ae0d663d2c9d437d35b753fe592947e21aefd1963d8b253776982438a9d46269" }.stringify_keys
     request.expects(:headers).returns(headers).at_least_once
     authenticator = Api::V1::Auth::Authenticator.new(request)
 
