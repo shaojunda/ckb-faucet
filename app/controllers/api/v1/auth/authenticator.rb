@@ -28,9 +28,7 @@ module Api
           end
 
           def check_timestamp!
-            tolerant_time = 5.minutes
-            @timestamp = request.headers["x-ckbfs-date"]
-            raise Api::V1::ApiError::TimestampInvalidError if (Time.now.utc.to_i - timestamp.in_time_zone("UTC").to_i).abs > tolerant_time
+            TimestampValidator.new(timestamp).validate!
           end
 
           def check_body!
@@ -46,6 +44,8 @@ module Api
 
           def check_ckbfs_date!
             raise Api::V1::ApiError::DateHeaderMissingError if request.headers["x-ckbfs-date"].blank?
+
+            @timestamp = request.headers["x-ckbfs-date"]
           end
 
           def check_authorization_header!

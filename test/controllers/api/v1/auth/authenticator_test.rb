@@ -314,13 +314,9 @@ class AuthenticatorTest < ActiveSupport::TestCase
     } } }.to_json
     body = StringIO.new(request_body)
     request.expects(:body).returns(body).at_least_once
-    canonical_request = canonical_request(request, timestamp)
-    string_to_sign = string_to_sign(timestamp, canonical_request)
-    signing_key = signature_key(product.secret_access_key, date, service_name)
     signature = "abc"
     credential = credential(product.access_key_id, date)
     headers["authorization"] = authorization(credential, signature)
-    request.expects(:headers).returns(headers).at_least_once
     authenticator = Api::V1::Auth::Authenticator.new(request)
     assert_raises Api::V1::ApiError::SignatureInvalidError do
       authenticator.authenticate!
