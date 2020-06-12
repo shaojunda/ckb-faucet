@@ -48,7 +48,6 @@ module Api
           def check_signature_format!
             signature_values = signature&.split("=")
             raise Api::V1::ApiError::SignatureMissingError if signature.blank? || signature_values[0] != "Signature" || signature_values[1].blank?
-            signature = signature_values[1]
           end
       end
     end

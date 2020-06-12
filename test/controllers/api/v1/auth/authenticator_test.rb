@@ -136,8 +136,6 @@ class AuthenticatorTest < ActiveSupport::TestCase
     request = mock
     headers = { "x-ckbfs-date": "20200611T130513Z", host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date, Signature=ae0d663d2c9d437d35b753fe592947e21aefd1963d8b253776982438a9d46269" }.stringify_keys
     request.expects(:headers).returns(headers).at_least_once
-    type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
-    pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = {}.to_json
     body = StringIO.new(request_body)
     request.expects(:body).returns(body).at_least_once
