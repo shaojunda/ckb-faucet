@@ -323,6 +323,61 @@ class AuthenticatorTest < ActiveSupport::TestCase
     end
   end
 
+  test "should get the product when passing all validator" do
+    product = create(:product, access_key_id: "TYkNNrK4wjmche2i6WBAvajZ")
+    request = mock
+    timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
+    date = timestamp[0, 8]
+    headers = { "x-ckbfs-date": timestamp, host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date, Signature=ae0d663d2c9d437d35b753fe592947e21aefd1963d8b253776982438a9d46269" }.stringify_keys
+    request.expects(:headers).returns(headers).at_least_once
+    request.expects(:query_string).returns("").at_least_once
+    request.expects(:method).returns("POST").at_least_once
+    type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
+    pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
+    request_body = { data: { id: 1, type: "claim_event", attributes: {
+        request_uuid: type_script_args, request_type: 0, pk160: pk160
+    } } }.to_json
+    body = StringIO.new(request_body)
+    request.expects(:body).returns(body).at_least_once
+    canonical_request = canonical_request(request, timestamp)
+    string_to_sign = string_to_sign(timestamp, canonical_request)
+    signature_key = signature_key(product.secret_access_key, date, service_name)
+    signature = signature(signature_key, string_to_sign)
+    credential = credential(product.access_key_id, date)
+    headers["authorization"] = authorization(credential, signature)
+    authenticator = Api::V1::Auth::Authenticator.new(request)
+
+    assert_equal product, authenticator.authenticate!
+  end
+
+  test "should raise error if the service name is invalid" do
+    product = create(:product, access_key_id: "TYkNNrK4wjmche2i6WBAvajZ")
+    request = mock
+    timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
+    date = timestamp[0, 8]
+    headers = { "x-ckbfs-date": timestamp, host: "domain.com", authorization: "CKBFS1-HMAC-SHA256 Credential=TYkNNrK4wjmche2i6WBAvajZ/20200611/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date, Signature=ae0d663d2c9d437d35b753fe592947e21aefd1963d8b253776982438a9d46269" }.stringify_keys
+    request.expects(:headers).returns(headers).at_least_once
+    request.expects(:query_string).returns("").at_least_once
+    request.expects(:method).returns("POST").at_least_once
+    type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
+    pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
+    request_body = { data: { id: 1, type: "claim_event", attributes: {
+        request_uuid: type_script_args, request_type: 0, pk160: pk160
+    } } }.to_json
+    body = StringIO.new(request_body)
+    request.expects(:body).returns(body).at_least_once
+    canonical_request = canonical_request(request, timestamp)
+    string_to_sign = string_to_sign(timestamp, canonical_request)
+    signature_key = signature_key(product.secret_access_key, date, service_name)
+    signature = signature(signature_key, string_to_sign)
+    credential = credential(product.access_key_id, date, "abc")
+    headers["authorization"] = authorization(credential, signature)
+    authenticator = Api::V1::Auth::Authenticator.new(request)
+    assert_raises Api::V1::ApiError::ServiceInvalidError do
+      authenticator.authenticate!
+    end
+  end
+
   private
     def authorization(credential, signature)
       [
@@ -336,10 +391,10 @@ class AuthenticatorTest < ActiveSupport::TestCase
       "CKBFS1-HMAC-SHA256"
     end
 
-    def credential(access_key_id, date)
+    def credential(access_key_id, date, service_name = "faucet")
       [
           access_key_id,
-          credential_scope(date)
+          credential_scope(date, service_name)
       ].join("/")
     end
 
@@ -374,7 +429,7 @@ class AuthenticatorTest < ActiveSupport::TestCase
       "faucet"
     end
 
-    def credential_scope(date)
+    def credential_scope(date, service_name = "faucet")
       [
           date,
           service_name,
