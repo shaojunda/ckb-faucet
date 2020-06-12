@@ -35,6 +35,9 @@ module Api
 
             access_key_id = credential_values[1].split("/")[0]
             raise Api::V1::ApiError::AccessKeyIdInvalidError if access_key_id.size != 24
+
+            service_name = credential_values[1].split("/")[2]
+            raise Api::V1::ApiError::ServiceInvalidError if service_name != "faucet"
           end
 
           def check_signed_headers!

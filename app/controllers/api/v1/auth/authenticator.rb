@@ -15,6 +15,8 @@ module Api
           check_body!
           check_timestamp!
           check_signature!
+
+          product
         end
 
         private

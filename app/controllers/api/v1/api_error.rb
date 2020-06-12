@@ -78,6 +78,12 @@ module Api
           super(code: 1011, status: 401, title: "Signature is invalid", detail: "The request signature we calculated does not match the signature you provided. Check your Secret Access Key and signing method. Consult the service documentation for details.", href: "")
         end
       end
+
+      class ServiceInvalidError < ApiError
+        def initialize
+          super(code: 1012, status: 401, title: "Service is invalid", detail: "Currently the service name only supports 'faucet'", href: "")
+        end
+      end
     end
   end
 end
