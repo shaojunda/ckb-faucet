@@ -11,8 +11,11 @@ class Api::V1::ClaimEventsController < ApplicationController
 
   private
     def handle_errors
-      if "h24_quota".in?(@claim_event.errors.map { |_, error| error })
+      errors = @claim_event.errors.map { |_, error| error }
+      if "h24_quota".in? errors
         raise Api::V1::ApiError::ExceedsDailyQuotaLimitPerProductError
+      elsif "h24_quota_per_request_type".in? errors
+        raise Api::V1::ApiError::ExceedsDailyQuotaLimitPerTypeError
       end
     end
 
