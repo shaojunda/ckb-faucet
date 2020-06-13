@@ -234,4 +234,22 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal response_json, response.body
   end
+
+  test "should return error object when no record found by given id" do
+    product = create(:product, quota_config: { "h24_quota": 4, "h24_quota_per_request_type": 2 })
+    timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
+    request = mock
+    body = StringIO.new
+    headers = { "x-ckbfs-date": timestamp, host: "domain.com" }.stringify_keys
+    request.expects(:headers).returns(headers).at_least_once
+    request.expects(:query_string).returns("").at_least_once
+    request.expects(:method).returns("GET").at_least_once
+    request.expects(:body).returns(body).at_least_once
+    error_object = Api::V1::ApiError::ClaimEventNotFoundError.new
+    response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
+
+    valid_get api_v1_claim_event_url("abc"), headers: { "x-ckbfs-date": timestamp, "authorization": authorization(request, timestamp, product) }
+
+    assert_equal response_json, response.body
+  end
 end
