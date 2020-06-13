@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_13_201729) do
+ActiveRecord::Schema.define(version: 2020_06_13_202243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -53,6 +53,30 @@ ActiveRecord::Schema.define(version: 2020_06_13_201729) do
     t.index ["created_at_unixtimestamp"], name: "index_claim_events_on_created_at_unixtimestamp"
     t.index ["id", "tx_hash", "tx_status"], name: "index_claim_events_on_id_and_tx_hash_and_tx_status"
     t.index ["product_id"], name: "index_claim_events_on_product_id"
+  end
+
+  create_table "outputs", force: :cascade do |t|
+    t.bigint "split_cell_event_id"
+    t.string "block_hash"
+    t.decimal "capacity"
+    t.integer "cell_index"
+    t.binary "data"
+    t.string "lock_args"
+    t.string "lock_code_hash"
+    t.string "lock_hash"
+    t.string "lock_hash_type"
+    t.integer "output_data_len"
+    t.integer "status", default: 1
+    t.string "tx_hash"
+    t.string "type_args"
+    t.string "type_code_hash"
+    t.string "type_hash"
+    t.string "type_hash_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["split_cell_event_id"], name: "index_outputs_on_split_cell_event_id"
+    t.index ["status"], name: "index_outputs_on_status", where: "(status = 1)"
+    t.index ["tx_hash", "cell_index"], name: "index_outputs_on_tx_hash_and_cell_index", unique: true
   end
 
   create_table "products", force: :cascade do |t|
