@@ -86,4 +86,28 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal response_json, response.body
   end
+
+  test "should return error object when one product's claim count for one type exceeds the quota limit" do
+    product = create(:product, quota_config: { "h24_quota": 4, "h24_quota_per_request_type": 2 })
+    create_list(:claim_event, 2, product: product, request_type: 0)
+    type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
+    pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
+    request_body = { data: { id: 1, type: "claim_event", attributes: {
+        request_uuid: type_script_args, request_type: 0, pk160: pk160
+    } } }.to_json
+    error_object = Api::V1::ApiError::ExceedsDailyQuotaLimitPerTypeError.new
+    response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
+    timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
+    request = mock
+    body = StringIO.new(request_body)
+    headers = { "x-ckbfs-date": timestamp, host: "domain.com" }.stringify_keys
+    request.expects(:headers).returns(headers).at_least_once
+    request.expects(:query_string).returns("").at_least_once
+    request.expects(:method).returns("POST").at_least_once
+    request.expects(:body).returns(body).at_least_once
+
+    valid_post api_v1_claim_events_url, params: request_body, headers: { "x-ckbfs-date": timestamp, "authorization": authorization(request, timestamp, product) }
+
+    assert_equal response_json, response.body
+  end
 end
