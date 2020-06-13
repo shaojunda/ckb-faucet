@@ -65,7 +65,8 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return error object when one product's claim count exceeds the quota limit" do
     product = create(:product, quota_config: { "h24_quota": 4, "h24_quota_per_request_type": 2 })
-    create_list(:claim_event, 4, product: product)
+    create_list(:claim_event, 2, product: product, request_type: 0)
+    create_list(:claim_event, 2, product: product, request_type: 1)
     type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {

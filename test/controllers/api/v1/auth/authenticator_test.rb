@@ -321,7 +321,7 @@ class AuthenticatorTest < ActiveSupport::TestCase
     end
   end
 
-  test "should get the product when passing all validator" do
+  test "should get the product, timestamp and signature when passing all validator" do
     product = create(:product, access_key_id: "TYkNNrK4wjmche2i6WBAvajZ")
     request = mock
     timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
@@ -345,7 +345,7 @@ class AuthenticatorTest < ActiveSupport::TestCase
     headers["authorization"] = authorization(credential, signature)
     authenticator = Api::V1::Auth::Authenticator.new(request)
 
-    assert_equal product, authenticator.authenticate!
+    assert_equal [product, timestamp, signature], authenticator.authenticate!
   end
 
   test "should raise error if the service name is invalid" do
