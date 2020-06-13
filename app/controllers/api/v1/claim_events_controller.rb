@@ -4,6 +4,7 @@ class Api::V1::ClaimEventsController < ApplicationController
   def create
     @claim_event = ClaimEvent.new(claim_events_params)
     if @claim_event.save
+      render json: ClaimEventSerializer.new(@claim_event)
     else
       handle_errors
     end
