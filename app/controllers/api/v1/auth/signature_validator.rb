@@ -34,7 +34,7 @@ module Api
           %w(host x-ckbfs-content-sha256 x-ckbfs-date).sort.join(";")
         end
 
-        def credential_scope(date)
+        def credential_scope
           [
               date,
               SERVICE_NAME,
@@ -54,7 +54,7 @@ module Api
           [
               ALGORITHM,
               timestamp,
-              credential_scope(date),
+              credential_scope,
               sha256_hexdigest(canonical_request)
           ].join("\n")
         end

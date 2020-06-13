@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   before_action :check_header_info
+  before_action :authenticate!
   rescue_from Api::V1::ApiError, with: :api_error
 
   private
@@ -12,5 +13,9 @@ class ApplicationController < ActionController::API
 
     def api_error(error)
       render json: ApiErrorSerializer.new([error], message: error.title), status: error.status
+    end
+
+    def authenticate!
+      @current_product = Api::V1::Auth::Authenticator.new(request).authenticate!
     end
 end
