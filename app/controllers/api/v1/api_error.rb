@@ -114,6 +114,12 @@ module Api
           super(code: 1007, status: 422, title: "Exceeds daily total quota limit", detail: "Exceeds daily total quota limit", href: "")
         end
       end
+
+      class RequestTypeInvalidError < ApiError
+        def initialize
+          super(code: 1008, status: 422, title: "Request type invalid error", detail: "Request type only support 0 or 1 for now", href: "")
+        end
+      end
     end
   end
 end

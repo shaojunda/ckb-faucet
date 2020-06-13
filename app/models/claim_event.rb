@@ -5,6 +5,7 @@ class ClaimEvent < ApplicationRecord
 
   enum status: { pending: 0, processed: 1 }
   enum tx_status: { pending: 0, proposed: 1, committed: 2 }, _prefix: :tx
+  enum request_type: { type0: 0, type1: 1 }
 
   belongs_to :product
 
