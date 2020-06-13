@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_12_215550) do
+ActiveRecord::Schema.define(version: 2020_06_13_184317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -26,6 +26,13 @@ ActiveRecord::Schema.define(version: 2020_06_12_215550) do
     t.index ["access_key_id"], name: "index_access_keys_on_access_key_id", unique: true
     t.index ["product_id"], name: "index_access_keys_on_product_id"
     t.index ["secret_access_key"], name: "index_access_keys_on_secret_access_key", unique: true
+  end
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "address_hash"
+    t.decimal "balance", precision: 30, default: "0"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "claim_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

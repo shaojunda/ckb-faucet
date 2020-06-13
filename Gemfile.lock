@@ -1,16 +1,16 @@
 GIT
-  remote: https://github.com/shaojunda/ckb-sdk-ruby.git
-  revision: d5fad82f0d9bdeadfcb4e4b08a6cb392b62e3072
+  remote: https://github.com/nervosnetwork/ckb-sdk-ruby.git
+  revision: 99b9974d0ef399111515a59aabb3b5a7d0ce1e39
   branch: develop
   specs:
-    ckb-sdk-ruby (0.29.1)
+    ckb-sdk-ruby (0.32.0)
       bitcoin-secp256k1 (~> 0.5.2)
       net-http-persistent (~> 3.0.0)
       rbnacl (~> 6.0, >= 6.0.1)
 
 GIT
   remote: https://github.com/stympy/faker.git
-  revision: 74e27ffa31bc0bf07c44324e2f95506904e3c015
+  revision: 9b0c36987067f9db792dbb30e4d4322bb3a66157
   branch: master
   specs:
     faker (2.12.0)
@@ -78,7 +78,7 @@ GEM
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
     ansi (1.5.0)
-    ast (2.4.0)
+    ast (2.4.1)
     awesome_print (1.8.0)
     bitcoin-secp256k1 (0.5.2)
       ffi (>= 1.9.25)
@@ -209,7 +209,7 @@ GEM
       rack (>= 1.1)
       rubocop (>= 0.82.0)
     ruby-progressbar (1.10.1)
-    shoulda-context (1.2.2)
+    shoulda-context (2.0.0)
     shoulda-matchers (4.3.0)
       activesupport (>= 4.2.0)
     simplecov (0.18.5)

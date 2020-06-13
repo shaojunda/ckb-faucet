@@ -25,7 +25,7 @@ gem "puma", "~> 4.3.3"
 gem "bootsnap", ">= 1.4.2", require: false
 
 # CKB SDK
-gem "ckb-sdk-ruby", git: "https://github.com/shaojunda/ckb-sdk-ruby.git", require: "ckb", branch: "develop"
+gem "ckb-sdk-ruby", git: "https://github.com/nervosnetwork/ckb-sdk-ruby.git", require: "ckb", branch: "develop"
 
 # Serializer
 gem "fast_jsonapi"
