@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_06_12_215550) do
   end
 
   create_table "claim_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "product_id"
     t.string "access_key_id"
     t.string "request_uuid"
     t.string "pk160"
@@ -44,6 +45,7 @@ ActiveRecord::Schema.define(version: 2020_06_12_215550) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["created_at_unixtimestamp"], name: "index_claim_events_on_created_at_unixtimestamp"
     t.index ["id", "tx_hash", "tx_status"], name: "index_claim_events_on_id_and_tx_hash_and_tx_status"
+    t.index ["product_id"], name: "index_claim_events_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|

@@ -24,9 +24,11 @@ end
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  access_key_id            :string
+#  product_id               :bigint
 #
 # Indexes
 #
 #  index_claim_events_on_created_at_unixtimestamp      (created_at_unixtimestamp)
 #  index_claim_events_on_id_and_tx_hash_and_tx_status  (id,tx_hash,tx_status)
+#  index_claim_events_on_product_id                    (product_id)
 #

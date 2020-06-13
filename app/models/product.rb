@@ -2,6 +2,9 @@
 
 class Product < ApplicationRecord
   VALID_QUOTA_CONFIG_KEYS = %w(h24_quota h24_quota_per_request_type)
+
+  has_many :claim_events
+
   validate :quota_config_key_must_correct
 
   def self.generate(name:, quota_config:)

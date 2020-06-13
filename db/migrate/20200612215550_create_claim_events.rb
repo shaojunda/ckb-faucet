@@ -2,6 +2,7 @@ class CreateClaimEvents < ActiveRecord::Migration[6.0]
   def change
     enable_extension "pgcrypto"
     create_table :claim_events, id: :uuid do |t|
+      t.bigint :product_id
       t.string :access_key_id
       t.string :request_uuid
       t.string :pk160
@@ -18,6 +19,7 @@ class CreateClaimEvents < ActiveRecord::Migration[6.0]
     end
 
     add_index(:claim_events, [:id, :tx_hash, :tx_status])
+    add_index(:claim_events, :product_id)
     add_index(:claim_events, :created_at_unixtimestamp)
   end
 end
