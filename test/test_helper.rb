@@ -28,8 +28,29 @@ if ENV["CI"] == "true"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
+module RequestHelpers
+  def json
+    JSON.parse(response.body)
+  end
+
+  def valid_get(uri, opts = {})
+    params = {}
+    params[:params] = opts[:params] || {}
+    params[:headers] = { "Content-Type": "application/vnd.api+json", "Accept": "application/vnd.api+json" }
+    send :get, uri, params
+  end
+
+  def valid_post(uri, opts = {})
+    params = {}
+    params[:params] = opts[:params] || {}
+    params[:headers] = { "Content-Type": "application/vnd.api+json", "Accept": "application/vnd.api+json" }
+    send :post, uri, params
+  end
+end
+
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
+  include ::RequestHelpers
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)
 
