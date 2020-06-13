@@ -16,7 +16,7 @@ module Api
           check_timestamp!
           check_signature!
 
-          product
+          return product, timestamp, signature
         end
 
         private
@@ -54,10 +54,12 @@ module Api
           end
 
           def signature
-            authorization = request.headers["authorization"]
-            target_key = "Signature="
-            credential_index = authorization.index(target_key) + target_key.size
-            authorization[credential_index..-1]
+            @signature ||= begin
+                             authorization = request.headers["authorization"]
+                             target_key = "Signature="
+                             credential_index = authorization.index(target_key) + target_key.size
+                             authorization[credential_index..-1]
+                           end
           end
 
           def access_key_id
