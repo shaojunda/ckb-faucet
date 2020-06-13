@@ -190,4 +190,48 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal expected_response, response.body
   end
+
+  test "should set right content type when call show" do
+    claim_event = create(:claim_event)
+
+    valid_get api_v1_claim_event_url(claim_event)
+
+    assert_equal "application/vnd.api+json", response.media_type
+  end
+
+  test "should respond with 415 Unsupported Media Type when call show and Content-Type is wrong" do
+    claim_event = create(:claim_event)
+
+    get api_v1_claim_event_url(claim_event), headers: { "Content-Type": "text/plain" }
+
+    assert_equal 415, response.status
+  end
+
+  test "should respond with error object when call show and Content-Type is wrong" do
+    claim_event = create(:claim_event)
+    error_object = Api::V1::ApiError::ContentTypeInvalidError.new
+    response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
+
+    get api_v1_claim_event_url(claim_event), headers: { "Content-Type": "text/plain" }
+
+    assert_equal response_json, response.body
+  end
+
+  test "should respond with 406 Not Acceptable when call show and Accept is wrong" do
+    claim_event = create(:claim_event)
+
+    get api_v1_claim_event_url(claim_event), headers: { "Content-Type": "application/vnd.api+json", "Accept": "application/json" }
+
+    assert_equal 406, response.status
+  end
+
+  test "should respond with error object when call show and Accept is wrong" do
+    claim_event = create(:claim_event)
+    error_object = Api::V1::ApiError::AcceptInvalidError.new
+    response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
+
+    get api_v1_claim_event_url(claim_event), headers: { "Content-Type": "application/vnd.api+json", "Accept": "application/json" }
+
+    assert_equal response_json, response.body
+  end
 end
