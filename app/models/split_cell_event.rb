@@ -1,0 +1,2 @@
+class SplitCellEvent < ApplicationRecord
+end
