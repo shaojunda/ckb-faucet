@@ -13,7 +13,10 @@ class Api::V1::ClaimEventsController < ApplicationController
   end
 
   def show
-    render json: {}
+    claim_event = ClaimEvent.find(params[:id])
+    render json: ClaimEventSerializer.new(claim_event)
+  rescue ActiveRecord::RecordNotFound
+    raise Api::V1::ApiError::ClaimEventNotFoundError
   end
 
   private

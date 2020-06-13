@@ -31,6 +31,8 @@ module Api
           end
 
           def check_body!
+            return if request.body.size.zero?
+
             BodyValidator.new(request.body).validate!
           end
 

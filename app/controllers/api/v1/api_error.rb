@@ -120,6 +120,12 @@ module Api
           super(code: 1008, status: 422, title: "Request type invalid error", detail: "Request type only support 0 or 1 for now", href: "")
         end
       end
+
+      class ClaimEventNotFoundError < ApiError
+        def initialize
+          super(code: 1009, status: 404, title: "Claim event not found ", detail: "No claim event record found by given id", href: "")
+        end
+      end
     end
   end
 end
