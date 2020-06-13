@@ -12,10 +12,13 @@ class Api::V1::ClaimEventsController < ApplicationController
     raise Api::V1::ApiError::RequestTypeInvalidError
   end
 
+  def show
+    render json: {}
+  end
+
   private
     def handle_errors
       errors = @claim_event.errors.map { |_, error| error }
-      binding.pry
       if "h24_quota".in? errors
         raise Api::V1::ApiError::ExceedsDailyQuotaLimitPerProductError
       elsif "h24_quota_per_request_type".in? errors
