@@ -44,6 +44,7 @@ module RequestHelpers
     params = {}
     params[:params] = opts[:params] || {}
     params[:headers] = { "Content-Type": "application/vnd.api+json", "Accept": "application/vnd.api+json" }
+    params[:headers].merge opts[:headers] if opts[:headers].present?
     send :post, uri, params
   end
 end
@@ -55,4 +56,20 @@ class ActiveSupport::TestCase
   parallelize(workers: :number_of_processors)
 
   # Add more helper methods to be used by all tests here...
+  #
+  def authorization(request, timestamp, product)
+    validator = Api::V1::Auth::SignatureValidator.new(request, timestamp, product.secret_access_key, nil)
+    [
+        "#{Api::V1::Auth::SignatureValidator::ALGORITHM} Credential=#{credential(product.access_key_id, validator.credential_scope)}",
+        "SignedHeaders=#{validator.signed_headers}",
+        "Signature=#{validator.sign}"
+    ].join(", ")
+  end
+
+  def credential(access_key_id, credential_scope)
+    [
+        access_key_id,
+        credential_scope
+    ].join("/")
+  end
 end

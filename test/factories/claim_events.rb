@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :claim_event do
-    uuid { }
     access_key_id { SecureRandom.base58(24) }
     request_uuid { "MyString" }
     pk160 { "0x#{SecureRandom.hex(21)}" }
