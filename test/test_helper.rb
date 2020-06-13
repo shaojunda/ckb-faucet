@@ -44,7 +44,7 @@ module RequestHelpers
     params = {}
     params[:params] = opts[:params] || {}
     params[:headers] = { "Content-Type": "application/vnd.api+json", "Accept": "application/vnd.api+json" }
-    params[:headers].merge opts[:headers] if opts[:headers].present?
+    params[:headers].merge! opts[:headers] if opts[:headers].present?
     send :post, uri, params
   end
 end

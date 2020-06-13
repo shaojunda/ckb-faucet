@@ -7,6 +7,8 @@ class ClaimEvent < ApplicationRecord
   enum tx_status: { pending: 0, proposed: 1, committed: 2 }, _prefix: :tx
 
   belongs_to :product
+
+  validates_with ClaimEventValidator, on: :create
 end
 
 # == Schema Information

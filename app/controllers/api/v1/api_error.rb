@@ -96,6 +96,12 @@ module Api
           super(code: 1004, status: 406, title: "Not Acceptable", detail: "Accept must be application/vnd.api+json", href: "")
         end
       end
+
+      class ExceedsDailyQuotaLimitPerProductError < ApiError
+        def initialize
+          super(code: 1005, status: 422, title: "Exceeds daily quota limit", detail: "Exceeds daily quota limit", href: "")
+        end
+      end
     end
   end
 end
