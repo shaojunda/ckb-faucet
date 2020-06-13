@@ -108,6 +108,12 @@ module Api
           super(code: 1006, status: 422, title: "Exceeds daily per type quota limit", detail: "Exceeds daily per type quota limit", href: "")
         end
       end
+
+      class ExceedsDailyQuotaLimitError < ApiError
+        def initialize
+          super(code: 1007, status: 422, title: "Exceeds daily total quota limit", detail: "Exceeds daily total quota limit", href: "")
+        end
+      end
     end
   end
 end

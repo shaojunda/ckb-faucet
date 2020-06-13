@@ -16,6 +16,8 @@ class Api::V1::ClaimEventsController < ApplicationController
         raise Api::V1::ApiError::ExceedsDailyQuotaLimitPerProductError
       elsif "h24_quota_per_request_type".in? errors
         raise Api::V1::ApiError::ExceedsDailyQuotaLimitPerTypeError
+      elsif "h24_total_quota".in? errors
+        raise Api::V1::ApiError::ExceedsDailyQuotaLimitError
       end
     end
 
