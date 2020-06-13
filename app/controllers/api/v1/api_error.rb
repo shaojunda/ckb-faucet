@@ -84,6 +84,18 @@ module Api
           super(code: 1012, status: 401, title: "Service is invalid", detail: "Currently the service name only supports 'faucet'", href: "")
         end
       end
+
+      class ContentTypeInvalidError < ApiError
+        def initialize
+          super(code: 1003, status: 415, title: "Unsupported Media Type", detail: "Content Type must be application/vnd.api+json", href: "")
+        end
+      end
+
+      class AcceptInvalidError < ApiError
+        def initialize
+          super(code: 1004, status: 406, title: "Not Acceptable", detail: "Accept must be application/vnd.api+json", href: "")
+        end
+      end
     end
   end
 end
