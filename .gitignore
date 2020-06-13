@@ -33,3 +33,5 @@ TAGS
 
 # Ignore coverage results
 coverage/*
+
+/config/credentials/production.key
