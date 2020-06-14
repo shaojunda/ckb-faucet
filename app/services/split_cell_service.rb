@@ -2,9 +2,9 @@
 
 class SplitCellService
   def call
-    api = CKB::API.new(host: Rails.application.credentials.CKB_NODE_URL)
+    api = SdkApi.instance
     official_account = Account.last
-    ckb_wallet = Wallet.new(api: api, from_addresses: official_account.address_hash, for_split: true)
+    ckb_wallet = Wallet.new(api: api, from_addresses: official_account.address_hash, for_split: true, collector_type: :default_indexer)
     CKB::Config.instance.set_api(Rails.application.credentials.CKB_NODE_URL)
     balance = official_account.balance
     output_balance = Output.where(status: %w(live)).sum(:capacity).to_i
@@ -25,7 +25,7 @@ class SplitCellService
   end
 
   def check_transactions
-    api = CKB::API.new(host: Rails.application.credentials.CKB_NODE_URL)
+    api = SdkApi.instance
     loop do
       SplitCellEvent.order(:id).where(status: "pending").each do |event|
         tx = api.get_transaction(event.tx_hash)
@@ -58,6 +58,7 @@ class SplitCellService
             capacity: output.capacity, data: tx.outputs_data[index], split_cell_event_id: split_cell.id,
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
+            output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[index]).bytesize, cellbase: false,
             tx_hash: tx_hash, cell_index: index, created_at: Time.current, updated_at: Time.current
         }
       end
@@ -69,6 +70,7 @@ class SplitCellService
         previous_output = input.previous_output
         tx_with_status = api.get_transaction(previous_output.tx_hash)
         transaction = tx_with_status.transaction
+        cellbase = transaction.inputs.first.previous_output.tx_hash == "0x0000000000000000000000000000000000000000000000000000000000000000" ? true : false
         cell_index = previous_output.index
         output = transaction.outputs[cell_index]
         lock = output.lock
@@ -77,6 +79,7 @@ class SplitCellService
             capacity: output.capacity, data: transaction.outputs_data[cell_index], status: "collected", split_cell_event_id: split_cell.id,
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
+            output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[cell_index]).bytesize, cellbase: cellbase,
             tx_hash: transaction.hash, cell_index: cell_index, created_at: Time.current, updated_at: Time.current, block_hash: tx_with_status.tx_status.block_hash
         }
       end
