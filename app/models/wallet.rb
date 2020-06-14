@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class Wallet
-  attr_reader :api, :mode, :input_scripts, :for_split, :collector_type
+  attr_reader :api, :input_scripts, :for_split, :collector_type
 
-  def initialize(api:, from_addresses:, mode: CKB::MODE::TESTNET, collector_type: :default_scanner, for_split: false)
+  def initialize(api:, from_addresses:, collector_type: :default_scanner, for_split: false)
     @api = api
-    @mode = mode
     @for_split = for_split
     @collector_type = collector_type
     @input_scripts = (from_addresses.is_a?(Array) ? from_addresses : [from_addresses]).map do |address|
