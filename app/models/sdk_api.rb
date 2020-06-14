@@ -9,6 +9,10 @@ class SdkApi
     @api = CKB::API.new(host: Rails.application.credentials.CKB_NODE_URL)
   end
 
+  def mode
+    @mode ||= @api.get_blockchain_info.chain == "ckb" ? CKB::MODE::MAINNET : CKB::MODE::TESTNET
+  end
+
   METHOD_NAMES.each do |name|
     define_method name do |*params|
       call_rpc(name, params: params)
