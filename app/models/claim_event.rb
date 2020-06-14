@@ -3,7 +3,7 @@
 class ClaimEvent < ApplicationRecord
   self.implicit_order_column = "created_at_unixtimestamp"
 
-  enum status: { pending: 0, processed: 1 }
+  enum status: { pending: 0, processing: 1, processed: 2 }
   enum tx_status: { pending: 0, proposed: 1, committed: 2 }, _prefix: :tx
   enum request_type: { type0: 0, type1: 1 }
 
