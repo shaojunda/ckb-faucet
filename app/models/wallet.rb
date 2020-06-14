@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class Wallet
-  attr_reader :api, :mode, :input_scripts, :for_split
+  attr_reader :api, :mode, :input_scripts, :for_split, :collector_type
 
-  def initialize(api:, from_addresses:, mode: CKB::MODE::TESTNET, for_split: false)
+  def initialize(api:, from_addresses:, mode: CKB::MODE::TESTNET, collector_type: :default_scanner, for_split: false)
     @api = api
     @mode = mode
     @for_split = for_split
+    @collector_type = collector_type
     @input_scripts = (from_addresses.is_a?(Array) ? from_addresses : [from_addresses]).map do |address|
       CKB::AddressParser.new(address).parse.script
     end
@@ -49,7 +50,11 @@ class Wallet
 
   private
     def collector
-      collector = CKB::Collector.new(api).default_indexer(lock_hashes: input_scripts.map(&:compute_hash))
+      collector = if collector_type == :default_scanner
+        Collector.new(api).scanner(lock_hashes: input_scripts.first.compute_hash)
+      else
+        CKB::Collector.new(api).default_indexer(lock_hashes: input_scripts.map(&:compute_hash))
+      end
 
       Enumerator.new do |result|
         loop do
@@ -66,9 +71,7 @@ class Wallet
     end
 
     def collect_cell(cell_meta, result)
-      out_point = cell_meta.out_point
-      output = Output.find_by(tx_hash: out_point.tx_hash, cell_index: out_point.index)
-      if cell_meta.output_data_len == 0 && cell_meta.output.type.nil? && !output.collected?
+      if cell_meta.output_data_len == 0 && cell_meta.output.type.nil?
         result << cell_meta
       end
     end
