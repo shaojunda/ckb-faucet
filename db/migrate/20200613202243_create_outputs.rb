@@ -17,6 +17,7 @@ class CreateOutputs < ActiveRecord::Migration[6.0]
       t.string :type_code_hash
       t.string :type_hash
       t.string :type_hash_type
+      t.boolean :cellbase
 
       t.timestamps
     end

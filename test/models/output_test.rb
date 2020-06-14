@@ -14,6 +14,7 @@ end
 #  block_hash          :string
 #  capacity            :decimal(, )
 #  cell_index          :integer
+#  cellbase            :boolean
 #  data                :binary
 #  lock_args           :string
 #  lock_code_hash      :string
