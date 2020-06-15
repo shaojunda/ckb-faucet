@@ -114,7 +114,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return error object when claim count exceeds the total quota limit" do
     product = create(:product, quota_config: { "h24_quota": 4, "h24_quota_per_request_type": 2 })
-    product1 = create(:product, quota_config: { "h24_quota": 2, "h24_quota_per_request_type": 1 })
+    product1 = create(:product, name: "KFC1", quota_config: { "h24_quota": 2, "h24_quota_per_request_type": 1 })
     create_list(:claim_event, 2, product: product, request_type: 0)
     create_list(:claim_event, 2, product: product, request_type: 1)
     create(:claim_event, product: product1, request_type: 0)
@@ -142,7 +142,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return error object when request type is invalid" do
     product = create(:product, quota_config: { "h24_quota": 4, "h24_quota_per_request_type": 2 })
-    product1 = create(:product, quota_config: { "h24_quota": 2, "h24_quota_per_request_type": 1 })
+    product1 = create(:product, name: "KFC1", quota_config: { "h24_quota": 2, "h24_quota_per_request_type": 1 })
     create_list(:claim_event, 2, product: product, request_type: 0)
     create_list(:claim_event, 2, product: product, request_type: 1)
     create(:claim_event, product: product1, request_type: 0)
