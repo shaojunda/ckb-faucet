@@ -2,28 +2,32 @@ sudo: true
 dist: xenial
 jobs:
   include:
-    - language: ruby
-      services:
-        - postgresql
-        - redis-server
-      addons:
-        postgresql: "10"
-      rvm:
-        - 2.6.4
-      env:
-        global:
-          - RAILS_ENV=test
-      cache:
-        bundler: true
-      before_install:
-        - gem install bundler -v 2.0.1
-        - sudo apt-get update
-        - sudo apt-get install -y libsodium-dev
-      install:
-        - git clone https://github.com/bitcoin-core/secp256k1.git && cd secp256k1 && ./autogen.sh && ./configure && make && ./tests && sudo make install && cd ..
-        - bundle install
-      before_script:
-        - psql -c 'create database "ckb_faucet_test";' -U postgres
-      script:
-        - bundle exec rails db:migrate
-        - CI=true bundle exec rails test
+  - language: ruby
+    services:
+    - postgresql
+    - redis-server
+    addons:
+      postgresql: '10'
+    rvm:
+    - 2.6.4
+    env:
+      global:
+      - RAILS_ENV=test
+    cache:
+      bundler: true
+    before_install:
+    - gem install bundler -v 2.0.1
+    - sudo apt-get update
+    - sudo apt-get install -y libsodium-dev
+    install:
+    - git clone https://github.com/bitcoin-core/secp256k1.git && cd secp256k1 && ./autogen.sh
+      && ./configure && make && ./tests && sudo make install && cd ..
+    - bundle install
+    before_script:
+    - psql -c 'create database "ckb_faucet_test";' -U postgres
+    script:
+    - bundle exec rails db:migrate
+    - CI=true bundle exec rails test
+env:
+  global:
+    secure: loUAro4zxoVKngLxXbq4f/u8eG0u4cJEWGE63dPP3SsY4nuO4FBXfVamudCB7b7vwErUvriAZ5yZqSJ6FuuEhVBiu9spoCp5RuYrm3SkPIu0mgikxnJQo5tjNEc9LK0G0F7QE0LsSKdLVdiJSmBz2WYhczcDMcjERaKv71tA75PwZywlSTCiFQHz8e2PlM2lOiLL/EJgasxxFf/QQe+f3nzz1gRCjhiT5sygLvNRtQZOkX9muUsU3czle6mZgtJ15K6YSLqEPDm7PdrwHCPOqUgesKxzpzRKLPfQ+BFhxE4Z7kIB4s2k7o39myt50AoBMlOUBBrYPDxgw+e0xZmCiie+SEDrlR8Byh9e4+lC7DWxsmviYc6qCJZwkgwt7WJzGvogNTrxxhZJQ0NRvKj8zFLo4oF5zWfPP023WrTqYJzhwVYtcsiw5VDISW4PmGt8X54SisvSPlzqhI3KRQlhLjijQAp2Mi85RUKi6Dd1xoVhoANmwDoo9SM6kCMHvKFXOajBiW5DjbCZJfkzy1abmXY6J8+YgtV9FsMw9XABIBFevlTTdOJQEgR6U5sJQFh9HsZSfQrgDOi2Bh2Cc6ombsALxihnu7tJI6a5enhbCiDtF3sbOWhO98aztcB31fY5rUZ8UiJtkOllzhdeFZHHImWqMUp0YA7OKW0pGdIm13Y=
