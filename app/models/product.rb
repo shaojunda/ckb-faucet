@@ -5,14 +5,15 @@ class Product < ApplicationRecord
   VALID_QUOTA_CONFIG_KEYS = %w(h24_quota h24_quota_per_request_type)
 
   has_many :claim_events
+  has_many :access_keys, dependent: :delete_all
 
   validate :quota_config_key_must_correct
 
   def self.generate(name:, quota_config:)
     ActiveRecord::Base.transaction do
-      access_key = AccessKey.create!
-      product = self.create!(name: name, quota_config: quota_config, access_key_id: access_key.access_key_id, secret_access_key: access_key.secret_access_key)
-      access_key.update(product: product)
+      product = self.create!(name: name, quota_config: quota_config)
+      access_key = AccessKey.create!(product: product)
+      product.update(access_key_id: access_key.access_key_id, secret_access_key: access_key.secret_access_key)
     end
   end
 

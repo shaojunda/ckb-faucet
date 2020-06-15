@@ -52,7 +52,7 @@ module Api
           end
 
           def product
-            @product ||= Product.find_by(access_key_id: access_key_id)
+            @product ||= Product.find_by(access_key_id: access_key_id, status: "active")
           end
 
           def signature

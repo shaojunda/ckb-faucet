@@ -4,6 +4,9 @@ require_relative "../lib/core_extensions/secure_token_with_length"
 
 class AccessKey < ApplicationRecord
   enum status: { inactive: 0, active: 1 }
+
+  belongs_to :product
+
   has_secure_token_with_length :access_key_id
   has_secure_token_with_length :secret_access_key, length: 40
 end
