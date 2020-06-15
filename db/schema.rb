@@ -73,6 +73,8 @@ ActiveRecord::Schema.define(version: 2020_06_13_202243) do
     t.string "type_hash"
     t.string "type_hash_type"
     t.boolean "cellbase"
+    t.boolean "checked", default: false
+    t.decimal "block_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["split_cell_event_id"], name: "index_outputs_on_split_cell_event_id"

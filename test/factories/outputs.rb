@@ -25,9 +25,11 @@ end
 #
 #  id                  :bigint           not null, primary key
 #  block_hash          :string
+#  block_number        :decimal(, )
 #  capacity            :decimal(, )
 #  cell_index          :integer
 #  cellbase            :boolean
+#  checked             :boolean          default(FALSE)
 #  data                :binary
 #  lock_args           :string
 #  lock_code_hash      :string

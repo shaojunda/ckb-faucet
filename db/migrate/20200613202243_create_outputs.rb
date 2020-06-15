@@ -18,6 +18,8 @@ class CreateOutputs < ActiveRecord::Migration[6.0]
       t.string :type_hash
       t.string :type_hash_type
       t.boolean :cellbase
+      t.boolean :checked, default: false
+      t.decimal :block_number
 
       t.timestamps
     end
