@@ -36,7 +36,7 @@ class SplitCellService
             event.block_hash = block_hash
             event.block_number = block.header.number
             event.completed!
-            event.outputs.live.update_all(block_hash: block_hash)
+            event.outputs.live.update_all(block_hash: block_hash, block_number: block.header.number)
             event.outputs.collected.update_all(status: "dead")
           end
         end
@@ -70,6 +70,8 @@ class SplitCellService
         previous_output = input.previous_output
         tx_with_status = api.get_transaction(previous_output.tx_hash)
         transaction = tx_with_status.transaction
+        block_hash = tx_with_status.block_hash
+        block = api.get_block(block_hash)
         cellbase = transaction.inputs.first.previous_output.tx_hash == "0x0000000000000000000000000000000000000000000000000000000000000000" ? true : false
         cell_index = previous_output.index
         output = transaction.outputs[cell_index]
@@ -80,7 +82,7 @@ class SplitCellService
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
             output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[cell_index]).bytesize, cellbase: cellbase,
-            tx_hash: transaction.hash, cell_index: cell_index, created_at: Time.current, updated_at: Time.current, block_hash: tx_with_status.tx_status.block_hash
+            tx_hash: transaction.hash, cell_index: cell_index, created_at: Time.current, updated_at: Time.current, block_hash: block_hash, block_number: block.header.number
         }
       end
 
