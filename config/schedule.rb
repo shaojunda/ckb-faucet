@@ -20,7 +20,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-set :output, { standard: "cron.log" }
+set :output, { error: "log/cron.log", standard: "log/cron.log" }
 
 every 2.hours do
   runner "CheckOutputService.new.call"
@@ -32,4 +32,8 @@ end
 
 every 4.hours do
   runner "UpdateOfficialAccountBalanceService.new.call"
+end
+
+every 1.minutes do
+  runner "SendCapacityService.new.call"
 end
