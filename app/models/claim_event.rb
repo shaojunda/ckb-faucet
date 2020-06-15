@@ -3,13 +3,22 @@
 class ClaimEvent < ApplicationRecord
   self.implicit_order_column = "created_at_unixtimestamp"
 
+  DEFAULT_CAPACITY = 145 * 10**8
+
   enum status: { pending: 0, processing: 1, processed: 2 }
   enum tx_status: { pending: 0, proposed: 1, committed: 2 }, _prefix: :tx
   enum request_type: { type0: 0, type1: 1 }
 
   belongs_to :product
 
+  before_save :fill_default_capacity
+
   validates_with ClaimEventValidator, on: :create
+
+  private
+    def fill_default_capacity
+      self.capacity = DEFAULT_CAPACITY
+    end
 end
 
 # == Schema Information

@@ -2,7 +2,14 @@
 
 class ClaimEventSerializer
   include FastJsonapi::ObjectSerializer
-  attributes
+  attributes :status
+
+  attribute :tx_hash, if: Proc.new { |record|
+    record.tx_hash.present?
+  }
+  attribute :tx_status, if: Proc.new { |record|
+    record.tx_hash.present? && record.tx_status.present?
+  }
 end
 
 # == Schema Information
