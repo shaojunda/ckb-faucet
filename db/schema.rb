@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_13_202243) do
+ActiveRecord::Schema.define(version: 2020_06_15_075900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -89,7 +89,9 @@ ActiveRecord::Schema.define(version: 2020_06_13_202243) do
     t.jsonb "quota_config"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
     t.index ["access_key_id", "secret_access_key"], name: "index_products_on_access_key_id_and_secret_access_key", unique: true
+    t.index ["name"], name: "index_products_on_name", unique: true
   end
 
   create_table "split_cell_events", force: :cascade do |t|

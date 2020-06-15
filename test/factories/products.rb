@@ -17,6 +17,7 @@ end
 #  name              :string
 #  quota_config      :jsonb
 #  secret_access_key :string
+#  status            :integer          default(0)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  access_key_id     :string
@@ -24,4 +25,5 @@ end
 # Indexes
 #
 #  index_products_on_access_key_id_and_secret_access_key  (access_key_id,secret_access_key) UNIQUE
+#  index_products_on_name                                 (name) UNIQUE
 #
