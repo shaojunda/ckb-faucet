@@ -20,5 +20,9 @@
 # Learn more: http://github.com/javan/whenever
 
 every 2.hours do
-  runner "CheckOutputService.call"
+  runner "CheckOutputService.new.call"
+end
+
+every 2.hours do
+  runner "UpdateClaimEventInfoService.new.call"
 end
