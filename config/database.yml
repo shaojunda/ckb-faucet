@@ -19,7 +19,9 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= Rails.application.credentials.DB[:HOST] %>
+  port: <%= Rails.application.credentials.DB[:PORT] %>
+  pool: <%= Rails.application.credentials.DB[:RAILS_MAX_THREADS] %>
 
 development:
   <<: *default
@@ -81,5 +83,5 @@ test:
 production:
   <<: *default
   database: ckb_faucet_production
-  username: ckb_faucet
-  password: <%= ENV['CKB_FAUCET_DATABASE_PASSWORD'] %>
+  username: <%= Rails.application.credentials.DB[:USERNAME] %>
+  password: <%= Rails.application.credentials.DB[:PASSWORD] %>
