@@ -50,7 +50,7 @@ class Wallet
   private
     def collector
       collector = if collector_type == :default_scanner
-        Collector.new(api).scanner(lock_hashes: input_scripts.first.compute_hash)
+        Collector.new(api).scanner(input_scripts.first.compute_hash)
       else
         CKB::Collector.new(api).default_indexer(lock_hashes: input_scripts.map(&:compute_hash))
       end

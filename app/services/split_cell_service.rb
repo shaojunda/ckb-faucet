@@ -5,7 +5,6 @@ class SplitCellService
     api = SdkApi.instance
     official_account = Account.last
     ckb_wallet = Wallet.new(api: api, from_addresses: official_account.address_hash, for_split: true, collector_type: :default_indexer)
-    CKB::Config.instance.set_api(Rails.application.credentials.CKB_NODE_URL)
     balance = official_account.balance
     output_balance = Output.where(status: %w(live)).sum(:capacity).to_i
     cells_count = (balance - output_balance) / (207 * 10**8)

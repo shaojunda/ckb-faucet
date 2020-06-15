@@ -8,7 +8,7 @@ class TransactionGenerator < CKB::TransactionGenerator
       if type_script = output.type
         if type_handler = CKB::Config.instance.type_handler(type_script)
           output_data = transaction.outputs_data[index]
-          cell_meta = CKB::CellMeta.new(api: api, out_point: nil, output: output, output_data_len: Utils.hex_to_bin(output_data).bytesize, cellbase: false)
+          cell_meta = CKB::CellMeta.new(api: api, out_point: nil, output: output, output_data_len: CKB::Utils.hex_to_bin(output_data).bytesize, cellbase: false)
           cell_meta.output_data = output_data
           type_handler.generate(cell_meta: cell_meta, tx_generator: self)
         end

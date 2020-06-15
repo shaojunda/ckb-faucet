@@ -7,10 +7,49 @@ class SdkApi
 
   def initialize
     @api = CKB::API.new(host: Rails.application.credentials.CKB_NODE_URL)
+    setup_sdk_config
   end
 
   def mode
     @mode ||= @api.get_blockchain_info.chain == "ckb" ? CKB::MODE::MAINNET : CKB::MODE::TESTNET
+  end
+
+  def setup_sdk_config
+    config = CKB::Config.instance
+    config.set_api(Rails.application.credentials.CKB_NODE_URL)
+    config.type_handlers[[sudt_code_hash, sudt_hash_type]] = CKB::TypeHandlers::SudtHandler.new(sudt_cell_tx_hash, sudt_cell_index)
+  end
+
+  def sudt_code_hash
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      "0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212"
+    end
+  end
+
+  def sudt_hash_type
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      "data"
+    end
+  end
+
+  def sudt_cell_tx_hash
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      "0xc1b2ae129fad7465aaa9acc9785f842ba3e6e8b8051d899defa89f5508a77958"
+    end
+  end
+
+  def sudt_cell_index
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      0
+    end
   end
 
   METHOD_NAMES.each do |name|

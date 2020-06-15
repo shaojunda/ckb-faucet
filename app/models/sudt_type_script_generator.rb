@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class SudtTypeScriptGenerator
-  def initialize(uuid)
-    @uuid = uuid
+  def initialize(udt_uuid)
+    @udt_uuid = udt_uuid
   end
 
   def type_script
-    CKB::Types::Script.new(code_hash: code_hash, args: uuid, hash_type: hash_type)
+    CKB::Types::Script.new(code_hash: code_hash, args: udt_uuid, hash_type: hash_type)
   end
 
   def code_hash
@@ -26,5 +26,5 @@ class SudtTypeScriptGenerator
   end
 
   private
-  attr_reader :uuid
+  attr_reader :udt_uuid
 end

@@ -24,7 +24,7 @@ class Collector
             lock = CKB::Types::Script.new(code_hash: output.lock_code_hash, args: output.lock_args, hash_type: output.lock_hash_type)
             type = output.type_code_hash.present? ? CKB::Types::Script.new(code_hash: output.type_code_hash, args: output.type_args, hash_type: output.type_hash_type) : nil
 
-            CKB::CellMeta.new(api: api, out_point: CKB::Types::OutPoint.new(tx_hash: output.tx_hash, index: output.cell_index), output: CKB::Types::Output.new(capacity: output.capacity, lock: lock, type: type), output_data_len: output_data_len, cellbase: cellbase)
+            CKB::CellMeta.new(api: api, out_point: CKB::Types::OutPoint.new(tx_hash: output.tx_hash, index: output.cell_index), output: CKB::Types::Output.new(capacity: output.capacity.to_i, lock: lock, type: type), output_data_len: output_data_len, cellbase: cellbase)
           end
           page += 1
         end
