@@ -43,6 +43,9 @@ gem "whenever", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
 
+# Throttling
+gem "rack-attack"
+
 group :development, :test do
   gem "pry"
   gem "pry-nav"
