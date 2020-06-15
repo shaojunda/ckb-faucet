@@ -70,7 +70,7 @@ class SplitCellService
         previous_output = input.previous_output
         tx_with_status = api.get_transaction(previous_output.tx_hash)
         transaction = tx_with_status.transaction
-        block_hash = tx_with_status.block_hash
+        block_hash = tx_with_status.tx_status.block_hash
         block = api.get_block(block_hash)
         cellbase = transaction.inputs.first.previous_output.tx_hash == "0x0000000000000000000000000000000000000000000000000000000000000000" ? true : false
         cell_index = previous_output.index
