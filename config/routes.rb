@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :claim_events, only: %i(create show)
+      resources :health, only: :index
     end
   end
 end
