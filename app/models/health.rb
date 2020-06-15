@@ -3,6 +3,10 @@
 class Health
   WEEKLY_MINIMUM_QUOTA = (200 * 7) * 145 * 10**8
 
+  def id
+    Time.current.to_i
+  end
+
   def balance_state
     # 0 means normal 1 means abnormal
     account = Account.last
