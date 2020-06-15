@@ -26,3 +26,7 @@ end
 every 2.hours do
   runner "UpdateClaimEventInfoService.new.call"
 end
+
+every 4.hours do
+  runner "UpdateOfficialAccountBalanceService.new.call"
+end
