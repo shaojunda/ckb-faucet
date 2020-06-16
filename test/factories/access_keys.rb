@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :access_key do
-    secret_access_key { }
     status { "active" }
   end
 end
