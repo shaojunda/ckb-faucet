@@ -15,5 +15,7 @@ class UpdateClaimEventInfoService
     end
 
     ClaimEvent.upsert_all(values)
+
+    Rails.logger.info "UpdateClaimEventInfoService done"
   end
 end

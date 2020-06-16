@@ -21,5 +21,7 @@ class SendCapacityService
       end
       ClaimEvent.upsert_all(values)
     end
+
+    Rails.logger.info "SendCapacityService done"
   end
 end

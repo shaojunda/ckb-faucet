@@ -12,5 +12,7 @@ class CheckOutputService
       output.live! if cell.present?
       output.update(checked: true)
     end
+
+    Rails.logger.info "CheckOutputService done"
   end
 end
