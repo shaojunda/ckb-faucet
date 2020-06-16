@@ -1,11 +1,11 @@
 ## How to constructing authorization header
 
 The authorization header contain the signature for the request. Generating the signature is a process best understood in 5 distinct steps:
-1. [Canonical request](#step-1--build-canonical-request)
-2. [String to sign](#step-2--string-to-sign)
-3. [Generate user's signing key](#step-3--generate-user-s-signing-key)
-4. [Calculate signature](#step-4--calculate-signature)
-5. [Build the authorization header](#step-5--build-the-authorization-header)
+1. [Canonical request](#step-1-build-canonical-request)
+2. [String to sign](#step-2-string-to-sign)
+3. [Generate user's signing key](#step-3-generate-user-s-signing-key)
+4. [Calculate signature](#step-4-calculate-signature)
+5. [Build the authorization header](#step-5-build-the-authorization-header)
 
 ### Step 1: Build Canonical request
 Canonical request's blueprint looks like this:
