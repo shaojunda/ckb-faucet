@@ -33,7 +33,7 @@ class Rack::Attack
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle("req/ip", limit: 1, period: 10.seconds) do |req|
+  throttle("req/ip", limit: 100, period: 10.seconds) do |req|
     req.remote_ip
   end
 
@@ -62,6 +62,6 @@ class Rack::Attack
           "RateLimit-Reset" => (now + (match_data[:period] - now % match_data[:period])).to_s
       }
 
-      [429, headers, ["Throttled\n"]]
+      [429, headers, ["Throttled\n"].to_json]
     end
 end
