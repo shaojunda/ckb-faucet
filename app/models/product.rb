@@ -19,6 +19,14 @@ class Product < ApplicationRecord
     end
   end
 
+  def secret_access_key=(value)
+    super(EncryptionService.encrypt(value))
+  end
+
+  def secret_access_key
+    EncryptionService.decrypt(super)
+  end
+
   private
     def quota_config_key_must_correct
       errors.add(:quota_config, "quota_config invalid") if quota_config.stringify_keys.keys != VALID_QUOTA_CONFIG_KEYS

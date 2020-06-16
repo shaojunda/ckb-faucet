@@ -9,6 +9,14 @@ class AccessKey < ApplicationRecord
 
   has_secure_token_with_length :access_key_id
   has_secure_token_with_length :secret_access_key, length: 40
+
+  def secret_access_key=(value)
+    super(EncryptionService.encrypt(value))
+  end
+
+  def secret_access_key
+    EncryptionService.decrypt(super)
+  end
 end
 
 # == Schema Information
