@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class Rack::Attack
+  class Request < ::Rack::Request
+    def remote_ip
+      # Cloudflare stores remote IP in CF_CONNECTING_IP header
+      @remote_ip ||= (env["HTTP_CF_CONNECTING_IP"] ||
+          env["action_dispatch.remote_ip"] ||
+          ip).to_s
+    end
+  end
   ### Configure Cache ###
 
   # If you don't want to use Rails.cache (Rack::Attack's default), then
@@ -25,8 +33,8 @@ class Rack::Attack
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle("req/ip", limit: 100, period: 10) do |req|
-    req.ip # unless req.path.start_with?('/assets')
+  throttle("req/ip", limit: 1, period: 10.seconds) do |req|
+    req.remote_ip
   end
 
   ### Custom Throttle Response ###
