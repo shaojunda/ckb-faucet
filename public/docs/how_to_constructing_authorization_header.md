@@ -91,10 +91,4 @@ We’ve already seen most of the values in previous steps. The only addition is 
 `CKBFS1-HMAC-SHA256 Credential=pGUDimqkf1KXrabnz7uX9DEJ/20200616/faucet/ckbfs1_request, SignedHeaders=host;x-ckbfs-content-sha256;x-ckbfs-date, Signature=cc79989721399bbffd3657d3e053328c35d63d3fd95f200bd190b41d05c00830`
 
 ### Final step: Perform the request
-
-<<<<<<< HEAD
 [Ruby sample code](claim_example.rb)
-=======
-[Ruby sample code](claim_example.rb)
-
->>>>>>> origin/master
