@@ -207,6 +207,14 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 415, response.status
   end
 
+  test "should not respond with 415 when not set content type" do
+    claim_event = create(:claim_event)
+
+    get api_v1_claim_event_url(claim_event), headers: { "Accept": "application/vnd.api+json" }
+
+    assert_not_equal 415, response.status
+  end
+
   test "should respond with error object when call show and Content-Type is wrong" do
     claim_event = create(:claim_event)
     error_object = Api::V1::ApiError::ContentTypeInvalidError.new

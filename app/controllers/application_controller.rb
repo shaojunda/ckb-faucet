@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
 
   private
     def check_header_info
-      raise Api::V1::ApiError::ContentTypeInvalidError if request.headers["Content-Type"] != "application/vnd.api+json"
+      raise Api::V1::ApiError::ContentTypeInvalidError if content_type_invalid?
       raise Api::V1::ApiError::AcceptInvalidError if request.headers["Accept"] != "application/vnd.api+json"
     end
 
@@ -15,7 +15,19 @@ class ApplicationController < ActionController::API
       render json: ApiErrorSerializer.new([error], message: error.title), status: error.status
     end
 
+    def content_type_invalid?
+      content_type_invalid_for_update_action || content_type_invalid_for_fetch_action
+    end
+
+    def content_type_invalid_for_fetch_action
+      !request.method.in?(%w[POST PUT]) && request.headers["Content-Type"].present? && request.headers["Content-Type"] != "application/vnd.api+json"
+    end
+
+    def content_type_invalid_for_update_action
+      request.method.in?(%w[POST PUT]) && request.headers["Content-Type"] != "application/vnd.api+json"
+    end
+
     def authenticate!
       @current_product, @request_timestamp, @signature = Api::V1::Auth::Authenticator.new(request).authenticate!
-    end
+      end
 end
