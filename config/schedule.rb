@@ -26,7 +26,7 @@ every 2.hours do
   runner "CheckOutputService.new.call"
 end
 
-every 2.hours do
+every 1.minutes do
   runner "UpdateClaimEventInfoService.new.call"
 end
 

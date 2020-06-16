@@ -27,7 +27,6 @@ module Api
         end
 
         def sign
-          Rails.logger.info "Sign------ string_to_sign: #{string_to_sign}"
           OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), signing_key, string_to_sign)
         end
 
@@ -62,16 +61,10 @@ module Api
 
         def canonical_request
           http_method = request.method
-          Rails.logger.info "Sign------ http_method: #{http_method}"
           canonical_uri = request.headers["host"]
-          Rails.logger.info "Sign------ host: #{canonical_uri}"
           canonical_query_string = normalized_querystring(request.query_string)
-          Rails.logger.info "Sign------ canonical_query_string: #{canonical_query_string}"
           payload = request.body.read || ""
-          Rails.logger.info "Sign------ payload: #{payload}"
           request.body.rewind if payload.present?
-
-          Rails.logger.info "Sign------ timestamp: #{timestamp}"
 
           hashed_payload = sha256_hexdigest(payload)
           canonical_headers = %W[host:#{request.headers["host"]} x-ckbfs-content-sha256:#{hashed_payload} x-ckbfs-date:#{timestamp}].join("\n") + "\n"
