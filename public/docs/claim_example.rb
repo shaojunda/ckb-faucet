@@ -174,8 +174,8 @@ class Signer
 end
 
 # replace your access key id, secret access key, type script args and pk160
-access_key_id = "pGUDimqkf1KXrabnz7uX9DEJ"
-secret_access_key = "euFzwfDD8m5wQRujh3touXgLhYudH5AySBPSSzC4"
+access_key_id = "your access key id"
+secret_access_key = "your secret access key"
 type_script_args = "0x6e842ebb7d7fca88495c5f2edb05070198f6f8c798d7b8f1a48226f8f060c693"
 pk160 = "0x0e7cd8e7f3524ef3419b94b3aae89cc019b41750"
 request_body = {

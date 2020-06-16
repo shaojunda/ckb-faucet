@@ -92,9 +92,4 @@ We’ve already seen most of the values in previous steps. The only addition is 
 
 ### Final step: Perform the request
 
-<<<<<<< HEAD
 [Ruby sample code](claim_example.rb)
-=======
-[Ruby sample code](claim_example.rb)
-
->>>>>>> origin/master
