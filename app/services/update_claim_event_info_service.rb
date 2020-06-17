@@ -23,8 +23,10 @@ class UpdateClaimEventInfoService
       collected_output_values[:cell_index] << input.previous_output.index
     end
 
-    ClaimEvent.upsert_all(values)
-    Output.collected.where(collected_output_values).update_all(status: "dead")
+    if values.present?
+      ClaimEvent.upsert_all(values)
+      Output.collected.where(collected_output_values).update_all(status: "dead")
+    end
 
     Rails.logger.info "UpdateClaimEventInfoService done"
   end
