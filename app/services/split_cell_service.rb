@@ -64,7 +64,8 @@ class SplitCellService
             output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[index]).bytesize, cellbase: false,
             tx_hash: tx_hash, cell_index: index, created_at: Time.current, updated_at: Time.current
         }
-      end
+      end.compact
+
       Output.upsert_all(output_values, unique_by: %i[tx_hash cell_index])
     end
 
