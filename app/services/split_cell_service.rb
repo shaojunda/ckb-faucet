@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class SplitCellService
+  DEFAULT_CELL_CAPACITY = 207 * 10**8
+
   def call
     api = SdkApi.instance
     official_account = Account.last
     ckb_wallet = Wallet.new(api: api, from_addresses: official_account.address_hash, for_split: true, collector_type: :default_indexer)
     balance = official_account.balance
-    output_balance = Output.where(status: %w(live)).sum(:capacity).to_i
-    cells_count = (balance - output_balance) / (207 * 10**8)
+    output_balance = Output.live.sum(:capacity).to_i
+    cells_count = (balance - output_balance) / DEFAULT_CELL_CAPACITY
     cells_count.times.each_slice(1500) do |items|
       ActiveRecord::Base.transaction do
         to_infos = items.map do
@@ -51,6 +53,8 @@ class SplitCellService
   private
     def save_output(split_cell, tx, tx_hash)
       output_values = tx.outputs.each_with_index.map do |output, index|
+        next if output.capacity != DEFAULT_CELL_CAPACITY
+
         lock = output.lock
         type = output.type
         {
