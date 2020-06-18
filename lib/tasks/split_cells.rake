@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
-task split_cells: :environment do
+task :split_cells, [:capacity] => :environment do |_, args|
   loop do
     if SplitCellEvent.pending.exists?
       SplitCellService.new.check_transactions
     else
-      SplitCellService.new.call
+      if args[:capacity].present?
+        SplitCellService.new.call(args[:capacity].to_i)
+      else
+        SplitCellService.new.call
+      end
+
     end
     official_account = Account.last
     balance = official_account.balance
