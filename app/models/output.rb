@@ -3,6 +3,31 @@
 class Output < ApplicationRecord
   enum status: { dead: 0, live: 1, collected: 2 }
   belongs_to :split_cell_event
+
+  def check_output_status
+    values = []
+    cell_collector.each do |cell|
+      values << [cell.out_point.tx_hash, cell.out_point.index]
+    end
+    current_indexed_out_points = Output.live.pluck(:tx_hash, :cell_index)
+    puts "There are cells that have not been indexed" if values.difference(current_indexed_out_points).present?
+    puts "There are unknown cells" if current_indexed_out_points.difference(values).present?
+  end
+
+  def cell_collector
+    collector = CKB::Collector.new(api).default_indexer(lock_hashes: input_scripts.map(&:compute_hash))
+
+    Enumerator.new do |result|
+      loop do
+        cell_meta = collector.next
+        if cell_meta.output_data_len == 0 && cell_meta.output.type.nil? && cell_meta.output.capacity == SplitCellService::DEFAULT_CELL_CAPACITY
+          result << cell_meta
+        end
+      rescue StopIteration
+        break
+      end
+    end
+  end
 end
 
 # == Schema Information
