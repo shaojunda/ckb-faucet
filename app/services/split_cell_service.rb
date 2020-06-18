@@ -47,7 +47,7 @@ class SplitCellService
       sleep(10)
     end
 
-    puts "done"
+    puts "check_transactions done"
   end
 
   private
