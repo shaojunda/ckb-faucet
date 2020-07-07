@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class SplitCellService
-  def call
+  DEFAULT_CELL_CAPACITY = 207 * 10**8
+
+  def call(cell_capacity = DEFAULT_CELL_CAPACITY)
     api = SdkApi.instance
     official_account = Account.last
     ckb_wallet = Wallet.new(api: api, from_addresses: official_account.address_hash, for_split: true, collector_type: :default_indexer)
     balance = official_account.balance
-    output_balance = Output.where(status: %w(live)).sum(:capacity).to_i
-    cells_count = (balance - output_balance) / (207 * 10**8)
+    output_balance = Output.live.sum(:capacity).to_i
+    cells_count = (balance - output_balance) / cell_capacity
     cells_count.times.each_slice(1500) do |items|
       ActiveRecord::Base.transaction do
         to_infos = items.map do
@@ -16,9 +18,9 @@ class SplitCellService
         tx_generator = ckb_wallet.advance_generate(to_infos: to_infos)
         tx = ckb_wallet.advance_sign(tx_generator: tx_generator, contexts: Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY)
         tx_hash = api.send_transaction(tx)
-        split_cell = SplitCellEvent.create!(tx_hash: tx_hash)
-        save_previous_output(api, split_cell, tx)
-        save_output(split_cell, tx, tx_hash)
+        split_cell_event = SplitCellEvent.create!(tx_hash: tx_hash)
+        save_previous_output(api, split_cell_event, tx)
+        save_output(split_cell_event, tx, tx_hash)
       end
     end
   end
@@ -45,26 +47,29 @@ class SplitCellService
       sleep(10)
     end
 
-    puts "done"
+    puts "check_transactions done"
   end
 
   private
-    def save_output(split_cell, tx, tx_hash)
+    def save_output(split_cell_event, tx, tx_hash)
       output_values = tx.outputs.each_with_index.map do |output, index|
+        next if output.capacity != DEFAULT_CELL_CAPACITY
+
         lock = output.lock
         type = output.type
         {
-            capacity: output.capacity, data: tx.outputs_data[index], split_cell_event_id: split_cell.id,
+            capacity: output.capacity, data: tx.outputs_data[index], split_cell_event_id: split_cell_event.id,
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
             output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[index]).bytesize, cellbase: false,
             tx_hash: tx_hash, cell_index: index, created_at: Time.current, updated_at: Time.current
         }
-      end
+      end.compact
+
       Output.upsert_all(output_values, unique_by: %i[tx_hash cell_index])
     end
 
-    def save_previous_output(api, split_cell, tx)
+    def save_previous_output(api, split_cell_event, tx)
       previous_output_values = tx.inputs.map do |input|
         previous_output = input.previous_output
         tx_with_status = api.get_transaction(previous_output.tx_hash)
@@ -77,10 +82,10 @@ class SplitCellService
         lock = output.lock
         type = output.type
         {
-            capacity: output.capacity, data: transaction.outputs_data[cell_index], status: "collected", split_cell_event_id: split_cell.id,
+            capacity: output.capacity, data: transaction.outputs_data[cell_index], status: "collected", split_cell_event_id: split_cell_event.id,
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
-            output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[cell_index]).bytesize, cellbase: cellbase,
+            output_data_len: CKB::Utils.hex_to_bin(transaction.outputs_data[cell_index]).bytesize, cellbase: cellbase,
             tx_hash: transaction.hash, cell_index: cell_index, created_at: Time.current, updated_at: Time.current, block_hash: block_hash, block_number: block.header.number
         }
       end

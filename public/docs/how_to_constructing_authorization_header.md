@@ -1,11 +1,13 @@
 ## How to constructing authorization header
 
 The authorization header contain the signature for the request. Generating the signature is a process best understood in 5 distinct steps:
-1. [Canonical request](#step-1--build-canonical-request)
-2. [String to sign](#step-2--string-to-sign)
-3. [Generate user's signing key](#step-3--generate-user-s-signing-key)
-4. [Calculate signature](#step-4--calculate-signature)
-5. [Build the authorization header](#step-5--build-the-authorization-header)
+
+1. [Canonical request](#step-1-build-canonical-request)
+2. [String to sign](#step-2-string-to-sign)
+3. [Generate user's signing key](#step-3-generate-user-s-signing-key)
+4. [Calculate signature](#step-4-calculate-signature)
+5. [Build the authorization header](#step-5-build-the-authorization-header)
+
 
 ### Step 1: Build Canonical request
 Canonical request's blueprint looks like this:
@@ -36,7 +38,7 @@ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 Notes:
   * in this case, `<CanonicalQueryString>` is an empty string. Note however that the line must not be omitted and the newline is required.
   * in this case, `<CanonicalHeaders>` only required headers are `host`, `x-ckbfs-content-sha256` and `x-ckbfs-date`. The names of the headers are lowercase and whitespace is stripped, sorted by character code, one per line.
-  * `<SignedHeaders>` is a semicolon-separated list of the headers. We just repeat the ones we used for `<CanonicalHeaders>`. 
+  * `<SignedHeaders>` is a semicolon-separated list of the headers. We just repeat the ones we used for `<CanonicalHeaders>`.
   * `<HashedPayload>` is the SHA256 checksum of the request payload. Since we carry no payload in this request, we append the SHA256 hash of an empty string.
 
 ### Step 2: String to sign
@@ -61,7 +63,7 @@ Notes:
   * `<Timestamp>` is the current UTC time in ISO 8601 basic format.
   * `<CredentialScope>` binds the request to a certain date and service. It must be in the format: `<yyyyMMdd>/<Service>/ckbfs1_request`, where `ckbfs1_request` is a constant string.
   * `<CanonicalRequestHash>` is a hexadecimal representation of the SHA256 hash of our canonical request - the string from Step 1.
-    
+
 ### Step 3: Generate user’s signing key
 
 We have the string to sign, now we need the key which we’ll use to sign it. The signing key is derived from the user’s secret access key, through a four-step HMAC-SHA256 hashing process.
@@ -90,4 +92,9 @@ We’ve already seen most of the values in previous steps. The only addition is 
 
 ### Final step: Perform the request
 
+<<<<<<< HEAD
 [Ruby sample code](claim_example.rb)
+=======
+[Ruby sample code](claim_example.rb)
+
+>>>>>>> origin/master
