@@ -123,7 +123,19 @@ module Api
 
       class ClaimEventNotFoundError < ApiError
         def initialize
-          super(code: 1009, status: 404, title: "Claim event not found ", detail: "No claim event record found by given id", href: "")
+          super(code: 1009, status: 404, title: "Claim event not found", detail: "No claim event record found by given id", href: "")
+        end
+      end
+
+      class RequestUUIDInvalidError < ApiError
+        def initialize
+          super(code: 1010, status: 422, title: "Request UUID invalid error", detail: "The request_uuid should be the args of the type script", href: "")
+        end
+      end
+
+      class Pk160InvalidError < ApiError
+        def initialize
+          super(code: 1011, status: 422, title: "Pk160 invalid error", detail: "The pk160 should be the args of the lock script", href: "")
         end
       end
     end

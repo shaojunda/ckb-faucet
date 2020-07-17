@@ -14,10 +14,20 @@ class ClaimEvent < ApplicationRecord
   before_save :fill_default_capacity
 
   validates_with ClaimEventValidator, on: :create
+  validate :valid_hex_string, on: :create
 
   private
     def fill_default_capacity
       self.capacity = DEFAULT_CAPACITY
+    end
+
+    def valid_hex_string
+      unless CKB::Utils.valid_hex_string?(request_uuid)
+        errors.add(:request_uuid, "request_uuid is not valid hex string")
+      end
+      unless CKB::Utils.valid_hex_string?(pk160)
+        errors.add(:pk160, "pk160 is not valid hex string")
+      end
     end
 end
 
