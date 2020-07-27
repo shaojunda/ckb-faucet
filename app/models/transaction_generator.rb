@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TransactionGenerator < CKB::TransactionGenerator
   # Build unsigned transaction
   # @param collector [Enumerator] `CellMeta` enumerator
