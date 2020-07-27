@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :split_cell_event do
     tx_hash { "MyString" }
