@@ -26,5 +26,5 @@ class SudtTypeScriptGenerator
   end
 
   private
-  attr_reader :udt_uuid
+    attr_reader :udt_uuid
 end
