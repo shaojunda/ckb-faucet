@@ -28,6 +28,10 @@ class Api::V1::ClaimEventsController < ApplicationController
         raise Api::V1::ApiError::ExceedsDailyQuotaLimitPerTypeError
       elsif "h24_total_quota".in? errors
         raise Api::V1::ApiError::ExceedsDailyQuotaLimitError
+      elsif "request_uuid is not valid hex string".in? errors
+        raise Api::V1::ApiError::RequestUUIDInvalidError
+      elsif "pk160 is not valid hex string".in? errors
+        raise Api::V1::ApiError::Pk160InvalidError
       end
     end
 
