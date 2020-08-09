@@ -4,6 +4,8 @@ class ClaimEvent < ApplicationRecord
   self.implicit_order_column = "created_at_unixtimestamp"
 
   DEFAULT_CAPACITY = 145 * 10**8
+  MIN_ACP_ARGS_BYTESIZE = 20
+  MAX_ACP_ARGS_BYTESIZE = 22
 
   enum status: { pending: 0, processing: 1, processed: 2 }
   enum tx_status: { pending: 0, proposed: 1, committed: 2 }, _prefix: :tx
@@ -14,10 +16,26 @@ class ClaimEvent < ApplicationRecord
   before_save :fill_default_capacity
 
   validates_with ClaimEventValidator, on: :create
+  validate :valid_hex_string, on: :create
 
   private
     def fill_default_capacity
       self.capacity = DEFAULT_CAPACITY
+    end
+
+    def valid_hex_string
+      unless CKB::Utils.valid_hex_string?(request_uuid)
+        errors.add(:request_uuid, "request_uuid is not valid hex string")
+      end
+      if !CKB::Utils.valid_hex_string?(pk160)
+        errors.add(:pk160, "pk160 is not valid hex string")
+      else
+        errors.add(:pk160, "invalid pk160") if pk160_invalid?
+      end
+    end
+
+    def pk160_invalid?
+      CKB::Utils.hex_to_bin(pk160).bytesize < MIN_ACP_ARGS_BYTESIZE || CKB::Utils.hex_to_bin(pk160).bytesize > MAX_ACP_ARGS_BYTESIZE
     end
 end
 

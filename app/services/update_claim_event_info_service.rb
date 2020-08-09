@@ -15,12 +15,11 @@ class UpdateClaimEventInfoService
       tx.inputs.each do |input|
         tx_hash = input.previous_output.tx_hash
         index = input.previous_output.index
-        collected_output_values << { tx_hash: tx_hash, index: index, status: "dead" }
+        collected_output_values[:tx_hash]<< tx_hash
+        collected_output_values[:cell_index] << index
       end
       claim_event_status = tx_status == "committed" ? "processed" : claim_event.status
       values << { id: claim_event.id, status: claim_event_status, tx_status: tx_status, created_at: claim_event.created_at, updated_at: Time.current }
-      collected_output_values[:tx_hash]<< input.previous_output.tx_hash
-      collected_output_values[:cell_index] << input.previous_output.index
     end
 
     if values.present?

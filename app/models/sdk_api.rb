@@ -18,6 +18,50 @@ class SdkApi
     config = CKB::Config.instance
     config.set_api(Rails.application.credentials.CKB_NODE_URL)
     config.type_handlers[[sudt_code_hash, sudt_hash_type]] = CKB::TypeHandlers::SudtHandler.new(sudt_cell_tx_hash, sudt_cell_index)
+    config.lock_handlers[[acp_code_hash, acp_hash_type]] = AnyoneCanPayHandler.new(acp_cell_tx_hash, acp_cell_index)
+  end
+
+  def acp_cell_dep
+    acp_group_out_point = CKB::Types::OutPoint.new(
+      tx_hash: acp_cell_tx_hash,
+      index: acp_cell_index
+    )
+    CKB::Types::CellDep.new(
+      out_point: acp_group_out_point,
+      dep_type: "dep_group"
+    )
+  end
+
+  def acp_code_hash
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      "0x86a1c6987a4acbe1a887cca4c9dd2ac9fcb07405bbeda51b861b18bbf7492c4b"
+    end
+  end
+
+  def acp_hash_type
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      "type"
+    end
+  end
+
+  def acp_cell_tx_hash
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      "0x4f32b3e39bd1b6350d326fdfafdfe05e5221865c3098ae323096f0bfc69e0a8c"
+    end
+  end
+
+  def acp_cell_index
+    if mode == CKB::MODE::MAINNET
+      ""
+    else
+      0
+    end
   end
 
   def sudt_code_hash

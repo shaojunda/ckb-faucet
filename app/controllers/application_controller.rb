@@ -29,5 +29,5 @@ class ApplicationController < ActionController::API
 
     def authenticate!
       @current_product, @request_timestamp, @signature = Api::V1::Auth::Authenticator.new(request).authenticate!
-      end
+    end
 end

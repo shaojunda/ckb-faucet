@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :claim_event do
     product
     access_key_id { SecureRandom.base58(24) }
-    request_uuid { "MyString" }
+    request_uuid { "0x#{SecureRandom.hex(21)}" }
     pk160 { "0x#{SecureRandom.hex(21)}" }
     signature { SecureRandom.hex(32) }
     request_type { 1 }
