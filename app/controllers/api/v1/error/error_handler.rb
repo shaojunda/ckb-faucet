@@ -5,10 +5,22 @@ module Api
       module ErrorHandler
         def handle_errors(claim_event)
           errors = claim_event.errors
-          raise Api::V1::ApiError::Pk160InvalidError if errors.include?(:pk160)
+          handle_pk160_errors(errors)
           raise Api::V1::ApiError::RequestUUIDInvalidError if errors.include?(:request_uuid)
 
           handle_quota_config_errors(errors)
+        end
+
+        def handle_pk160_errors(errors)
+          pk160_prefix = "Pk160"
+          errors.full_messages_for(:pk160).each do |message|
+            case message.delete_prefix(pk160_prefix).strip
+            when "the same pk160 can only claim once perf product"
+              raise Api::V1::ApiError::Pk160AlreadyClaimedError
+            else
+              raise Api::V1::ApiError::Pk160InvalidError
+            end
+          end
         end
 
         def handle_quota_config_errors(errors)
