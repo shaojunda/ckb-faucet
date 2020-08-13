@@ -13,8 +13,8 @@ class ClaimEventValidator < ActiveModel::Validator
 
   private
     def the_same_pk160_can_only_claim_once_perf_product(record, product)
-      if product.claim_events.where(pk160: record.pk160).where.not(status: "failed").present?
-        record.errors.add(:pk160, "the same pk160 can only claim once perf product")
+      if product.claim_events.where(pk160: record.pk160, request_uuid: record.request_uuid).where.not(status: "failed").present?
+        record.errors.add(:pk160, "the same pk160 can only claim once per product per uuid")
       end
     end
 
