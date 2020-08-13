@@ -15,7 +15,7 @@ module Api
           pk160_prefix = "Pk160"
           errors.full_messages_for(:pk160).each do |message|
             case message.delete_prefix(pk160_prefix).strip
-            when "the same pk160 can only claim once perf product"
+            when "the same pk160 can only claim once per product per uuid"
               raise Api::V1::ApiError::Pk160AlreadyClaimedError
             else
               raise Api::V1::ApiError::Pk160InvalidError
