@@ -138,6 +138,12 @@ module Api
           super(code: 1011, status: 422, title: "Pk160 invalid error", detail: "The pk160 should be the args of the lock script", href: "")
         end
       end
+
+      class Pk160AlreadyClaimedError < ApiError
+        def initialize
+          super(code: 1012, status: 422, title: "Pk160 already claimed error", detail: "The pk160 has already claimed", href: "")
+        end
+      end
     end
   end
 end
