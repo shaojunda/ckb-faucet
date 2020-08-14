@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 
 class ClaimEventValidator < ActiveModel::Validator
-  MAXIMUM_CLAIM_COUNT_PER_DAY = 6900
+  MAXIMUM_CLAIM_COUNT_PER_DAY = 1000
 
   def validate(record)
     product = record.product
     total_claim_count_must_be_less_than_or_equal_to_the_quota_limit(record)
     claim_count_per_product_must_be_less_than_or_equal_to_the_quota_limit(record, product)
     claim_count_per_type_must_be_less_than_or_equal_to_the_quota_limit(record, product)
+    the_same_pk160_can_only_claim_once_perf_product(record, product)
   end
 
   private
+    def the_same_pk160_can_only_claim_once_perf_product(record, product)
+      if product.claim_events.where(pk160: record.pk160, request_uuid: record.request_uuid).where.not(status: "failed").present?
+        record.errors.add(:pk160, "the same pk160 can only claim once per product per uuid")
+      end
+    end
+
     def total_claim_count_must_be_less_than_or_equal_to_the_quota_limit(record)
       if ClaimEvent.where("created_at_unixtimestamp >= ?", 24.hours.ago.to_i).count >= MAXIMUM_CLAIM_COUNT_PER_DAY
         record.errors.add(:quota_config, "h24_total_quota")
