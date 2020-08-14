@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ClaimEventValidator < ActiveModel::Validator
-  MAXIMUM_CLAIM_COUNT_PER_DAY = 6900
+  MAXIMUM_CLAIM_COUNT_PER_DAY = 1000
 
   def validate(record)
     product = record.product
