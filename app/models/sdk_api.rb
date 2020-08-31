@@ -34,7 +34,7 @@ class SdkApi
 
   def acp_code_hash
     if mode == CKB::MODE::MAINNET
-      ""
+      "0x0fb343953ee78c9986b091defb6252154e0bb51044fd2879fde5b27314506111"
     else
       "0x86a1c6987a4acbe1a887cca4c9dd2ac9fcb07405bbeda51b861b18bbf7492c4b"
     end
@@ -42,7 +42,7 @@ class SdkApi
 
   def acp_hash_type
     if mode == CKB::MODE::MAINNET
-      ""
+      "data"
     else
       "type"
     end
@@ -50,7 +50,7 @@ class SdkApi
 
   def acp_cell_tx_hash
     if mode == CKB::MODE::MAINNET
-      ""
+      "0xa05f28c9b867f8c5682039c10d8e864cf661685252aa74a008d255c33813bb81"
     else
       "0x4f32b3e39bd1b6350d326fdfafdfe05e5221865c3098ae323096f0bfc69e0a8c"
     end
@@ -58,7 +58,7 @@ class SdkApi
 
   def acp_cell_index
     if mode == CKB::MODE::MAINNET
-      ""
+      0
     else
       0
     end
@@ -66,7 +66,7 @@ class SdkApi
 
   def sudt_code_hash
     if mode == CKB::MODE::MAINNET
-      ""
+      "0x5e7a36a77e68eecc013dfa2fe6a23f3b6c344b04005808694ae6dd45eea4cfd5"
     else
       "0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212"
     end
@@ -74,7 +74,7 @@ class SdkApi
 
   def sudt_hash_type
     if mode == CKB::MODE::MAINNET
-      ""
+      "type"
     else
       "data"
     end
@@ -82,7 +82,7 @@ class SdkApi
 
   def sudt_cell_tx_hash
     if mode == CKB::MODE::MAINNET
-      ""
+      "0xc7813f6a415144643970c2e88e0bb6ca6a8edc5dd7c1022746f628284a9936d5"
     else
       "0xc1b2ae129fad7465aaa9acc9785f842ba3e6e8b8051d899defa89f5508a77958"
     end
@@ -90,7 +90,7 @@ class SdkApi
 
   def sudt_cell_index
     if mode == CKB::MODE::MAINNET
-      ""
+      0
     else
       0
     end
