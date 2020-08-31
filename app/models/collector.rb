@@ -18,7 +18,7 @@ class Collector
           cell_meta_index += 1
         else
           cell_meta_index = 0
-          cell_metas = Output.where(lock_hash: lock_hash).live.page(page).per(100).map do |output|
+          cell_metas = Output.where(lock_hash: lock_hash).normal.live.page(page).per(100).map do |output|
             output_data_len = output.output_data_len
             cellbase = output.cellbase
             lock = CKB::Types::Script.new(code_hash: output.lock_code_hash, args: output.lock_args, hash_type: output.lock_hash_type)
