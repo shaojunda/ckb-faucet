@@ -13,7 +13,7 @@ class SplitCellService
     cells_count.times.each_slice(1500) do |items|
       ActiveRecord::Base.transaction do
         to_infos = items.map do
-          { "#{official_account.address_hash}": { capacity: 207 * 10**8 } }.stringify_keys
+          { "#{official_account.address_hash}": { capacity: DEFAULT_CELL_CAPACITY } }.stringify_keys
         end
         tx_generator = ckb_wallet.advance_generate(to_infos: to_infos)
         tx = ckb_wallet.advance_sign(tx_generator: tx_generator, contexts: Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY)
@@ -53,16 +53,15 @@ class SplitCellService
   private
     def save_output(split_cell_event, tx, tx_hash)
       output_values = tx.outputs.each_with_index.map do |output, index|
-        next if output.capacity != DEFAULT_CELL_CAPACITY
-
         lock = output.lock
         type = output.type
+        purpose = output.capacity == DEFAULT_CELL_CAPACITY ? "normal" : "for_split"
         {
             capacity: output.capacity, data: tx.outputs_data[index], split_cell_event_id: split_cell_event.id,
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
             output_data_len: CKB::Utils.hex_to_bin(tx.outputs_data[index]).bytesize, cellbase: false,
-            tx_hash: tx_hash, cell_index: index, created_at: Time.current, updated_at: Time.current
+            tx_hash: tx_hash, cell_index: index, created_at: Time.current, updated_at: Time.current, purpose: purpose
         }
       end.compact
 
@@ -81,12 +80,14 @@ class SplitCellService
         output = transaction.outputs[cell_index]
         lock = output.lock
         type = output.type
+        purpose = output.capacity == DEFAULT_CELL_CAPACITY ? "normal" : "for_split"
         {
             capacity: output.capacity, data: transaction.outputs_data[cell_index], status: "collected", split_cell_event_id: split_cell_event.id,
             lock_args: lock.args, lock_code_hash: lock.code_hash, lock_hash: lock.compute_hash, lock_hash_type: lock.hash_type,
             type_args: type&.args, type_code_hash: type&.code_hash, type_hash: type&.compute_hash, type_hash_type: type&.hash_type,
             output_data_len: CKB::Utils.hex_to_bin(transaction.outputs_data[cell_index]).bytesize, cellbase: cellbase,
-            tx_hash: transaction.hash, cell_index: cell_index, created_at: Time.current, updated_at: Time.current, block_hash: block_hash, block_number: block.header.number
+            tx_hash: transaction.hash, cell_index: cell_index, created_at: Time.current, updated_at: Time.current,
+            block_hash: block_hash, block_number: block.header.number, purpose: purpose
         }
       end
 

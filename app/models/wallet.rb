@@ -77,7 +77,7 @@ class Wallet
 
     def collect_cell_for_split(cell_meta, result)
       out_point = cell_meta.out_point
-      output = Output.find_by(tx_hash: out_point.tx_hash, cell_index: out_point.index)
+      output = Output.find_by(tx_hash: out_point.tx_hash, cell_index: out_point.index, purpose: "normal")
       if cell_meta.output_data_len == 0 && cell_meta.output.type.nil? && output.blank?
         result << cell_meta
       end

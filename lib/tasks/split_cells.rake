@@ -12,6 +12,7 @@ task :split_cells, [:capacity] => :environment do |_, args|
       end
 
     end
+    UpdateOfficialAccountBalanceService.new.call
     official_account = Account.last
     balance = official_account.balance
     output_balance = Output.live.sum(:capacity).to_i
