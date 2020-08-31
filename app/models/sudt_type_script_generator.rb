@@ -10,19 +10,11 @@ class SudtTypeScriptGenerator
   end
 
   def code_hash
-    if SdkApi.instance.mode == CKB::MODE::MAINNET
-      ""
-    else
-      "0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212"
-    end
+    SdkApi.instance.sudt_code_hash
   end
 
   def hash_type
-    if SdkApi.instance.mode == CKB::MODE::MAINNET
-      ""
-    else
-      "data"
-    end
+    SdkApi.instance.sudt_hash_type
   end
 
   private
