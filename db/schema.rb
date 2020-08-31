@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_15_075900) do
+ActiveRecord::Schema.define(version: 2020_08_31_063222) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -78,6 +77,7 @@ ActiveRecord::Schema.define(version: 2020_06_15_075900) do
     t.decimal "block_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "purpose", default: 0
     t.index ["split_cell_event_id"], name: "index_outputs_on_split_cell_event_id"
     t.index ["status"], name: "index_outputs_on_status", where: "(status = 1)"
     t.index ["tx_hash", "cell_index"], name: "index_outputs_on_tx_hash_and_cell_index", unique: true
@@ -103,4 +103,5 @@ ActiveRecord::Schema.define(version: 2020_06_15_075900) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
+
 end

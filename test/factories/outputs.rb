@@ -38,6 +38,7 @@ end
 #  lock_hash           :string
 #  lock_hash_type      :string
 #  output_data_len     :integer
+#  purpose             :integer          default("normal")
 #  status              :integer          default("live")
 #  tx_hash             :string
 #  type_args           :string

@@ -17,7 +17,7 @@ end
 #  name              :string
 #  quota_config      :jsonb
 #  secret_access_key :string
-#  status            :integer          default(0)
+#  status            :integer          default("active")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  access_key_id     :string

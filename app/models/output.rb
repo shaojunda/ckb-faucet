@@ -2,6 +2,7 @@
 
 class Output < ApplicationRecord
   enum status: { dead: 0, live: 1, collected: 2 }
+  enum purpose: { normal: 0, for_split: 1 }
   belongs_to :split_cell_event
 
   def check_output_status
@@ -47,6 +48,7 @@ end
 #  lock_hash           :string
 #  lock_hash_type      :string
 #  output_data_len     :integer
+#  purpose             :integer          default("normal")
 #  status              :integer          default("live")
 #  tx_hash             :string
 #  type_args           :string
