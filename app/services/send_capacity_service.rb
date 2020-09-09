@@ -9,7 +9,7 @@ class SendCapacityService
     ClaimEvent.pending.find_in_batches(batch_size: 1500) do |claim_events|
       ActiveRecord::Base.transaction do
         to_infos = claim_events.map do |claim_event|
-          lock_script = CKB::Types::Script.new(code_hash: api.acp_code_hash, args: claim_event.pk160, hash_type: "type")
+          lock_script = CKB::Types::Script.new(code_hash: api.acp_code_hash, args: claim_event.pk160, hash_type: api.acp_hash_type)
           target_address = CKB::Address.new(lock_script, mode: api.mode).generate
 
           { "#{target_address}": { capacity: 145 * 10**8, type: SudtTypeScriptGenerator.new(claim_event.request_uuid).type_script, data: CKB::Utils.generate_sudt_amount(0) } }.stringify_keys
