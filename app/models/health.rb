@@ -44,7 +44,7 @@ class Health
     def claim_count_per_product_greater_than_or_equal_to_the_quota_limit_names
       Product.all.map do |product|
         quota_config = product.quota_config
-        if product.claim_events.where(request_type: record.request_type).where("created_at_unixtimestamp >= ?", 24.hours.ago.to_i).count >= quota_config["h24_quota_per_request_type"]
+        if product.claim_events.where("created_at_unixtimestamp >= ?", 24.hours.ago.to_i).count >= quota_config["h24_quota_per_request_type"]
           [product.name]
         end
       end.compact
