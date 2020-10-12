@@ -16,7 +16,8 @@ task :split_cells, [:capacity] => :environment do |_, args|
     official_account = Account.last
     balance = official_account.balance
     output_balance = Output.live.sum(:capacity).to_i
-    if (output_balance - balance).abs <= 320000 * 10**8
+    if (output_balance - balance).abs <= 1000 * 10**8
+      SplitCellService.new.check_transactions
       puts "Split completed"
 
       break
