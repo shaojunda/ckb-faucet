@@ -34,7 +34,7 @@ class Health
 
   private
     def balance_less_than_the_amount_required_weekly?(account_balance)
-      account_balance < WEEKLY_MINIMUM_QUOTA
+      account_balance < WEEKLY_MINIMUM_QUOTA / 2
     end
 
     def total_claim_count_greater_than_or_equal_to_the_quota_limit?
