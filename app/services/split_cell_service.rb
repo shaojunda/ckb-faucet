@@ -9,7 +9,7 @@ class SplitCellService
     ckb_wallet = Wallet.new(api: api, from_addresses: official_account.address_hash, for_split: true, collector_type: :default_indexer)
     balance = official_account.balance
     output_balance = Output.live.sum(:capacity).to_i
-    cells_count = (balance - output_balance) / cell_capacity - 1
+    cells_count = (balance - output_balance) / cell_capacity
     cells_count.times.each_slice(1500) do |items|
       ActiveRecord::Base.transaction do
         to_infos = items.map do
