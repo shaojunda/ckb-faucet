@@ -34,7 +34,7 @@ class Health
 
   private
     def balance_less_than_the_amount_required_weekly?(account_balance)
-      account_balance < WEEKLY_MINIMUM_QUOTA
+      account_balance < WEEKLY_MINIMUM_QUOTA / 2
     end
 
     def total_claim_count_greater_than_or_equal_to_the_quota_limit?
@@ -44,7 +44,7 @@ class Health
     def claim_count_per_product_greater_than_or_equal_to_the_quota_limit_names
       Product.all.map do |product|
         quota_config = product.quota_config
-        if product.claim_events.where(request_type: record.request_type).where("created_at_unixtimestamp >= ?", 24.hours.ago.to_i).count >= quota_config["h24_quota_per_request_type"]
+        if product.claim_events.where("created_at_unixtimestamp >= ?", 24.hours.ago.to_i).count >= quota_config["h24_quota_per_request_type"]
           [product.name]
         end
       end.compact
