@@ -9,7 +9,7 @@ class SdkApi
   def initialize
     @api = CKB::API.new(host: Rails.application.credentials.CKB_NODE_URL)
     setup_sdk_config
-    @acp_type = "new"
+    @acp_type = "old"
   end
 
   def mode
