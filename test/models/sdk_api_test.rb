@@ -9,7 +9,6 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
-      api.acp_type = "old"
       assert_equal "0x86a1c6987a4acbe1a887cca4c9dd2ac9fcb07405bbeda51b861b18bbf7492c4b", api.acp_code_hash
     end
 
@@ -18,7 +17,6 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
-      api.acp_type = "old"
       assert_equal "type", api.acp_hash_type
     end
 
@@ -27,7 +25,6 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
-      api.acp_type = "old"
       assert_equal "0x4f32b3e39bd1b6350d326fdfafdfe05e5221865c3098ae323096f0bfc69e0a8c", api.acp_cell_tx_hash
     end
 
@@ -36,6 +33,7 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
+      api.acp_type = "new"
       assert_equal "0x3419a1c09eb2567f6552ee7a8ecffd64155cffe0f1796e6e61ec088d740c1356", api.acp_code_hash
     end
 
@@ -44,6 +42,7 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
+      api.acp_type = "new"
       assert_equal "type", api.acp_hash_type
     end
 
@@ -52,6 +51,7 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
+      api.acp_type = "new"
       assert_equal "0xec26b0f85ed839ece5f11c4c4e837ec359f5adc4420410f6453b1f6b60fb96a6", api.acp_cell_tx_hash
     end
   end
@@ -62,7 +62,6 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
-      api.acp_type = "old"
       assert_equal "0x0fb343953ee78c9986b091defb6252154e0bb51044fd2879fde5b27314506111", api.acp_code_hash
     end
 
@@ -71,7 +70,6 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
-      api.acp_type = "old"
       assert_equal "data", api.acp_hash_type
     end
 
@@ -80,7 +78,6 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
-      api.acp_type = "old"
       assert_equal "0xa05f28c9b867f8c5682039c10d8e864cf661685252aa74a008d255c33813bb81", api.acp_cell_tx_hash
     end
 
@@ -89,6 +86,7 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
+      api.acp_type = "new"
       assert_equal "0xd369597ff47f29fbc0d47d2e3775370d1250b85140c670e4718af712983a2354", api.acp_code_hash
     end
 
@@ -97,6 +95,7 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
+      api.acp_type = "new"
       assert_equal "type", api.acp_hash_type
     end
 
@@ -105,6 +104,7 @@ class SdkApiTest < ActiveSupport::TestCase
       api_obj = JSON.parse(blockchain_info.to_json, object_class: OpenStruct)
       CKB::API.stubs(:new).returns(api_obj)
       api = SdkApi.clone.instance
+      api.acp_type = "new"
       assert_equal "0x4153a2014952d7cac45f285ce9a7c5c0c0e1b21f2d378b82ac1433cb11c25c4d", api.acp_cell_tx_hash
     end
   end
