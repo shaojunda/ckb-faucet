@@ -4,10 +4,12 @@ class SdkApi
   include Singleton
 
   METHOD_NAMES = %w(rpc secp_group_out_point secp_code_out_point secp_data_out_point secp_cell_code_hash dao_out_point dao_code_hash dao_type_hash multi_sign_secp_cell_type_hash multi_sign_secp_group_out_point set_secp_group_dep set_dao_dep inspect genesis_block get_block_by_number genesis_block_hash get_block_hash get_header get_block get_tip_header get_tip_block_number get_cells_by_lock_hash get_transaction get_live_cell send_transaction local_node_info get_current_epoch get_epoch_by_number get_peers tx_pool_info get_block_economic_state get_blockchain_info get_peers_state compute_transaction_hash compute_script_hash secp_cell_type_hash dry_run_transaction calculate_dao_maximum_withdraw deindex_lock_hash get_live_cells_by_lock_hash get_lock_hash_index_states get_transactions_by_lock_hash index_lock_hash get_capacity_by_lock_hash get_header_by_number get_cellbase_output_capacity_details set_ban get_banned_addresses estimate_fee_rate get_block_template submit_block).freeze
+  attr_accessor :acp_type
 
   def initialize
     @api = CKB::API.new(host: Rails.application.credentials.CKB_NODE_URL)
     setup_sdk_config
+    @acp_type = "new"
   end
 
   def mode
@@ -32,7 +34,7 @@ class SdkApi
     )
   end
 
-  def acp_code_hash
+  def old_acp_code_hash
     if mode == CKB::MODE::MAINNET
       "0x0fb343953ee78c9986b091defb6252154e0bb51044fd2879fde5b27314506111"
     else
@@ -40,7 +42,7 @@ class SdkApi
     end
   end
 
-  def acp_hash_type
+  def old_acp_hash_type
     if mode == CKB::MODE::MAINNET
       "data"
     else
@@ -48,7 +50,7 @@ class SdkApi
     end
   end
 
-  def acp_cell_tx_hash
+  def old_acp_cell_tx_hash
     if mode == CKB::MODE::MAINNET
       "0xa05f28c9b867f8c5682039c10d8e864cf661685252aa74a008d255c33813bb81"
     else
@@ -56,12 +58,72 @@ class SdkApi
     end
   end
 
-  def acp_cell_index
+  def old_acp_cell_index
     if mode == CKB::MODE::MAINNET
       0
     else
       0
     end
+  end
+
+  def new_acp_code_hash
+    if mode == CKB::MODE::MAINNET
+      "0xd369597ff47f29fbc0d47d2e3775370d1250b85140c670e4718af712983a2354"
+    else
+      "0x3419a1c09eb2567f6552ee7a8ecffd64155cffe0f1796e6e61ec088d740c1356"
+    end
+  end
+
+  def new_acp_hash_type
+    if mode == CKB::MODE::MAINNET
+      "type"
+    else
+      "type"
+    end
+  end
+
+  def new_acp_cell_tx_hash
+    if mode == CKB::MODE::MAINNET
+      "0x4153a2014952d7cac45f285ce9a7c5c0c0e1b21f2d378b82ac1433cb11c25c4d"
+    else
+      "0xec26b0f85ed839ece5f11c4c4e837ec359f5adc4420410f6453b1f6b60fb96a6"
+    end
+  end
+
+  def new_acp_cell_index
+    if mode == CKB::MODE::MAINNET
+      0
+    else
+      0
+    end
+  end
+
+  def acp_code_hash
+    if acp_type == "new"
+      new_acp_code_hash
+    else
+      old_acp_code_hash
+    end
+  end
+
+  def acp_hash_type
+    if acp_type == "new"
+      new_acp_hash_type
+    else
+      old_acp_hash_type
+    end
+  end
+
+  def acp_cell_tx_hash
+    if acp_type == "new"
+      new_acp_cell_tx_hash
+    else
+      old_acp_cell_tx_hash
+    end
+  end
+
+  def acp_cell_index
+    0
   end
 
   def sudt_code_hash
