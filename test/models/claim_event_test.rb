@@ -13,6 +13,7 @@ end
 # Table name: claim_events
 #
 #  id                       :uuid             not null, primary key
+#  acp_type                 :integer          default("new")
 #  capacity                 :decimal(, )
 #  created_at_unixtimestamp :integer
 #  pk160                    :string
