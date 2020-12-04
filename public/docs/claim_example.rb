@@ -182,7 +182,7 @@ request_body = {
     data: {
         type: "claim_event",
         attributes: {
-            request_uuid: type_script_args, request_type: 0, pk160: pk160
+            request_uuid: type_script_args, request_type: 0, pk160: pk160, acp_type: "new"
         }
     }
 }.to_json
