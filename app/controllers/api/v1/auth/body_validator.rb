@@ -26,7 +26,8 @@ module Api
         end
 
         def valid_resource_attributes?
-          request_body.dig("data", "attributes").keys.sort == %w(request_uuid request_type pk160 acp_type).sort
+          request_keys = request_body.dig("data", "attributes").keys.sort
+          request_keys == %w(request_uuid request_type pk160).sort || request_keys == %w(request_uuid request_type pk160 acp_type).sort
         end
 
         def valid_resource_type?
