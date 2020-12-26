@@ -14,6 +14,7 @@ FactoryBot.define do
     tx_hash { "0x#{SecureRandom.hex(32)}" }
     tx_status { 0 }
     created_at_unixtimestamp { Time.current.to_i }
+    acp_type { "new" }
   end
 end
 

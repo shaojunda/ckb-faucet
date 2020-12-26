@@ -144,6 +144,12 @@ module Api
           super(code: 1012, status: 422, title: "Pk160 already claimed error", detail: "The pk160 has already claimed", href: "")
         end
       end
+
+      class AcpTypeError < ApiError
+        def initialize
+          super(code: 1013, status: 422, title: "Acp type error", detail: "Only support new acp request", href: "")
+        end
+      end
     end
   end
 end
