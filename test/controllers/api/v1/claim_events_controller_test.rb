@@ -70,7 +70,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {
-        request_uuid: type_script_args, request_type: 0, pk160: pk160
+        request_uuid: type_script_args, request_type: 0, pk160: pk160, acp_type: "new"
     } } }.to_json
     error_object = Api::V1::ApiError::ExceedsDailyQuotaLimitPerProductError.new
     response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
@@ -94,7 +94,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {
-        request_uuid: type_script_args, request_type: 0, pk160: pk160
+        request_uuid: type_script_args, request_type: 0, pk160: pk160, acp_type: "new"
     } } }.to_json
     error_object = Api::V1::ApiError::ExceedsDailyQuotaLimitPerTypeError.new
     response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
@@ -122,7 +122,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {
-        request_uuid: type_script_args, request_type: 1, pk160: pk160
+        request_uuid: type_script_args, request_type: 1, pk160: pk160, acp_type: "new"
     } } }.to_json
     error_object = Api::V1::ApiError::ExceedsDailyQuotaLimitError.new
     response_json = ApiErrorSerializer.new([error_object], message: error_object.title).serialized_json
@@ -173,7 +173,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     type_script_args = "123144"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {
-        request_uuid: type_script_args, request_type: 0, pk160: pk160
+        request_uuid: type_script_args, request_type: 0, pk160: pk160, acp_type: "new"
     } } }.to_json
     timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
     request = mock
@@ -269,7 +269,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {
-        request_uuid: type_script_args, request_type: 0, pk160: pk160
+        request_uuid: type_script_args, request_type: 0, pk160: pk160, acp_type: "new"
     } } }.to_json
     create(:claim_event, product: product, pk160: pk160, request_uuid: "0x6e842ebb7d7fca88495c5f2edb05070198f6f8c798d7b8f1a48226f8f060c693")
     timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
@@ -318,7 +318,7 @@ class Api::V1::ClaimEventsControllerTest < ActionDispatch::IntegrationTest
     type_script_args = "0x94bbc8327e16d195de87815c391e7b9131e80419c51a405a0b21227c6ee05129"
     pk160 = "0x69b7667edbe08cf19413102fcadc53c67e34fb71"
     request_body = { data: { id: 1, type: "claim_event", attributes: {
-        request_uuid: type_script_args, request_type: 0, pk160: pk160
+        request_uuid: type_script_args, request_type: 0, pk160: pk160, acp_type: "new"
     } } }.to_json
     timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
     request = mock
