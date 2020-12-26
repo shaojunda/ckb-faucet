@@ -6,9 +6,16 @@ module Api
         def handle_errors(claim_event)
           errors = claim_event.errors
           handle_pk160_errors(errors)
+          handle_acp_type_errors(errors)
           raise Api::V1::ApiError::RequestUUIDInvalidError if errors.include?(:request_uuid)
 
           handle_quota_config_errors(errors)
+        end
+
+        def handle_acp_type_errors(errors)
+          if errors.full_messages_for(:acp_type).present?
+            raise Api::V1::ApiError::AcpTypeError
+          end
         end
 
         def handle_pk160_errors(errors)
