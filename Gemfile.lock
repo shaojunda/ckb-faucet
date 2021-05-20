@@ -208,7 +208,7 @@ GEM
     rbnacl (7.1.1)
       ffi
     regexp_parser (1.7.1)
-    rexml (3.2.4)
+    rexml (3.2.5)
     rubocop (0.85.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
