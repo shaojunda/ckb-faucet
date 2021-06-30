@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Health
-  WEEKLY_MINIMUM_QUOTA = (1000 * 7) * 145 * 10**8
+  WEEKLY_MINIMUM_QUOTA = (10 * 7) * 145 * 10**8
 
   def id
     Time.current.to_i
