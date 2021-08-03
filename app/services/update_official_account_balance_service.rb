@@ -3,9 +3,8 @@
 class UpdateOfficialAccountBalanceService
   def call
     api = SdkApi.instance
-    ckb_wallet = CKB::Wallet.from_hex(api, Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY)
-    balance = api.get_capacity_by_lock_hash(ckb_wallet.lock_hash)
-    Account.last.update(balance: balance.capacity)
+    ckb_wallet = CKB::Wallet.from_hex(api, Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY, indexer_api: api.indexer_api)
+    Account.last.update(balance: ckb_wallet.get_balance)
 
     Rails.logger.info "UpdateOfficialAccountBalanceService done"
   end
