@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Wallet
-  attr_reader :api, :input_scripts, :for_split, :collector_type
+  attr_reader :api, :input_scripts, :for_split, :collector_type, :indexer_api
 
-  def initialize(api:, from_addresses:, collector_type: :default_scanner, for_split: false)
+  def initialize(api:, from_addresses:, collector_type: :default_scanner, for_split: false, indexer_api: nil)
     @api = api
+    @indexer_api = indexer_api
     @for_split = for_split
     @collector_type = collector_type
     @input_scripts = (from_addresses.is_a?(Array) ? from_addresses : [from_addresses]).map do |address|
@@ -52,7 +53,8 @@ class Wallet
       collector = if collector_type == :default_scanner
         Collector.new(api).scanner(input_scripts.first.compute_hash)
       else
-        CKB::Collector.new(api).default_indexer(lock_hashes: input_scripts.map(&:compute_hash))
+        search_keys = input_scripts.map { |script| CKB::Indexer::Types::SearchKey.new(script, "lock") }
+        CKB::Collector.new(indexer_api).default_indexer(search_keys: search_keys)
       end
 
       Enumerator.new do |result|
