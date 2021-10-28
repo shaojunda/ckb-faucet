@@ -8,7 +8,7 @@ class ClaimEvent < ApplicationRecord
   MAX_ACP_ARGS_BYTESIZE = 22
 
   enum status: { pending: 0, processing: 1, processed: 2, failed: 3 }
-  enum tx_status: { pending: 0, proposed: 1, committed: 2 }, _prefix: :tx
+  enum tx_status: { pending: 0, proposed: 1, committed: 2, rejected: 3 }, _prefix: :tx
   enum request_type: { type0: 0, type1: 1 }
   enum acp_type: { old: 0, new: 1 }, _prefix: :acp_type
 
