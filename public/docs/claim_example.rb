@@ -8,8 +8,9 @@ class ClaimEventExample
   def initialize(access_key_id, secret_access_key)
     @access_key_id = access_key_id
     @secret_access_key = secret_access_key
-    @base_uri = "https://faucet-priv-testnet-dev.nervos.tech/api/v1/claim_events"
+    @base_uri = "https://faucet.ckbapp.dev/aggron/api/v1/claim_events"
   end
+
   def post(request_body)
     claim_event_uri = URI(base_uri)
     https = Net::HTTP.new(claim_event_uri.host, claim_event_uri.port)
