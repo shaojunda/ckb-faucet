@@ -17,7 +17,7 @@ class SplitCellService
         end
         tx_generator = ckb_wallet.advance_generate(to_infos: to_infos)
         tx = ckb_wallet.advance_sign(tx_generator: tx_generator, contexts: Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY)
-        tx_hash = api.send_transaction(tx)
+        tx_hash = api.send_transaction(tx, "passthrough")
         split_cell_event = SplitCellEvent.create!(tx_hash: tx_hash)
         save_previous_output(api, split_cell_event, tx)
         save_output(split_cell_event, tx, tx_hash)
