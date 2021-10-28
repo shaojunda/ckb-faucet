@@ -22,7 +22,7 @@ class SendCapacityService
         end
         tx_generator = ckb_wallet.advance_generate(to_infos: to_infos)
         tx = ckb_wallet.advance_sign(tx_generator: tx_generator, contexts: Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY)
-        tx_hash = api.send_transaction(tx)
+        tx_hash = api.send_transaction(tx, "passthrough")
         values = claim_events.map do |claim_event|
           { id: claim_event.id, tx_hash: tx_hash, status: "processing", created_at: claim_event.created_at, updated_at: Time.current }
         end
@@ -44,7 +44,7 @@ class SendCapacityService
         end
         tx_generator = ckb_wallet.advance_generate(to_infos: to_infos)
         tx = ckb_wallet.advance_sign(tx_generator: tx_generator, contexts: Rails.application.credentials.OFFICIAL_WALLET_PRIVATE_KEY)
-        tx_hash = api.send_transaction(tx)
+        tx_hash = api.send_transaction(tx, "passthrough")
         values = claim_events.map do |claim_event|
           { id: claim_event.id, tx_hash: tx_hash, status: "processing", created_at: claim_event.created_at, updated_at: Time.current }
         end
